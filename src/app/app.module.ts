@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
 import Upload from 'src/utils/Upload';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import Upload from 'src/utils/Upload';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

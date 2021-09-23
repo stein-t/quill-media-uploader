@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    let quill = new Quill('#editor', {
+    const quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
         toolbar: {
@@ -30,20 +30,20 @@ export class AppComponent implements OnInit, AfterViewInit {
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             ['blockquote', 'code-block'],
 
-            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
+            [{ header: 1 }, { header: 2 }],               // custom button values
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ script: 'sub' }, { script: 'super' }],      // superscript/subscript
+            [{ indent: '-1' }, { indent: '+1' }],          // outdent/indent
+            [{ direction: 'rtl' }],                         // text direction
 
-            ["link", "image", { "upload": ["image", "audio", "video", "pdf", "word", "excel", "powerpoint" ] }],
+            ['link', 'image', { upload: ['image', 'audio', 'video', 'pdf', 'word', 'excel', 'powerpoint' ] }],
 
-            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ size: ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
-            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            [{ 'font': [] }],
-            [{ 'align': [] }],
+            [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
+            [{ font: [] }],
+            [{ align: [] }],
 
             ['clean']                                    // remove formatting button
           ],
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                   fileInput.setAttribute('accept', 'image/png', 'image/jpeg');
                   fileInput.classList.add('ql-image');
                   fileInput.addEventListener('change', () => {
-                    let range = this.quill.getSelection(true);
+                    const range = this.quill.getSelection(true);
                     this.quill.uploader.upload(range, fileInput);
                     fileInput.value = '';
                   });

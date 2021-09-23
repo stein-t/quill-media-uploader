@@ -1,5 +1,5 @@
 import Quill from 'quill';
-import * as Parchment from "parchment";
+import * as Parchment from 'parchment';
 const EmbedBlot = Quill.import('blots/embed') as typeof Parchment.default.Embed;
 import { sanitize } from 'quill/formats/link';
 
