@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { QuillModule } from 'ngx-quill';
+import { FormsModule } from '@angular/forms';
+import Upload from 'src/utils/Upload';
 
 @NgModule({
   declarations: [
@@ -10,7 +13,9 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    QuillModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

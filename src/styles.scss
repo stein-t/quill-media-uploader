@@ -1,1 +1,103 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+/* ==========================================================================
+    QuillEditor FileUploadTool DropDownMenu
+   ========================================================================== */
+
+.ql-snow .ql-picker.ql-upload > .ql-picker-label > svg {
+    display: none;
+}
+
+.ql-snow .ql-picker.ql-upload > .ql-picker-label {
+    padding: 0 5px;
+}
+
+.ql-snow .ql-picker.ql-upload.ql-expanded > .ql-picker-label {
+    color: #888;
+}
+
+.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
+.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-size: 1.2em;
+    font-weight: 900;
+}
+
+.ql-snow .ql-picker.ql-upload .ql-picker-options {
+    z-index: 1000;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+    min-width: 150px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+}
+
+// .ql-snow .ql-picker.ql-upload.ql-expanded .ql-picker-options {
+//     margin-top: unset;
+//     top: unset;
+//     margin-bottom: 1px;
+//     bottom: 100%;
+// }
+
+.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item {
+    cursor: pointer;
+    display: block;
+    color: #777;
+    font-weight: normal;
+    line-height: 1em;
+    white-space: nowrap;
+    padding: 3px 20px;
+}
+
+.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item:hover {
+    background-color: #e1e3e9;
+    color: #333;
+  }
+
+.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+    font-size: 1em;
+}
+
+.ql-snow .ql-picker.ql-upload .ql-picker-item > span {
+    margin-left: 10px;
+}
+
+.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+    display: inline-block;
+    line-height: 20px;
+}
+
+.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
+.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+    content: "\f0c6";
+}
+
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="image"]::before {
+    content: "\f1c5";
+}
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="audio"]::before {
+    content: "\f1c7";
+}
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="video"]::before {
+    content: "\f1c8";
+}
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="pdf"]::before {
+    content: "\f1c1";
+}
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="word"]::before {
+    content: "\f1c2";
+}
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="excel"]::before {
+    content: "\f1c3";
+}
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="powerpoint"]::before {
+    content: "\f1c4";
+}
