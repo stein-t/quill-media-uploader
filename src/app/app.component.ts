@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
-import * as Quill from 'quill';
+import Quill from 'quill';
 import Media from 'src/utils/MediaBlot';
 import Upload from 'src/utils/Upload';
 

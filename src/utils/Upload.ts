@@ -1,4 +1,5 @@
-import Delta from 'quill-delta';
+import Quill from 'quill';
+const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
 
 class Upload {
