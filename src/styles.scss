@@ -89,15 +89,15 @@
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="video"]::before {
     content: "\f1c8";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="pdf"]::before {
-    content: "\f1c1";
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="document"]::before {
+    content: "\f15b";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="word"]::before {
-    content: "\f1c2";
-}
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="excel"]::before {
-    content: "\f1c3";
-}
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="powerpoint"]::before {
-    content: "\f1c4";
+
+.ql-snow > .ql-editor .fa,
+.ql-snow > .ql-editor .fas,
+.ql-snow > .ql-editor .far,
+.ql-snow > .ql-editor .fal,
+.ql-snow > .ql-editor .fad,
+.ql-snow > .ql-editor .fab {
+  max-width: 100%;
 }
