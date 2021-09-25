@@ -18,17 +18,17 @@ class MediaUploader {
     this.toolbar = this.quill.getModule('toolbar');
     this.layout();
 
-    // addHandler does not work for non-existent handler: https://github.com/KillerCodeMonkey/ngx-quill/issues/104
+    // ISSUE: addHandler does not work for non-existent handler: https://github.com/KillerCodeMonkey/ngx-quill/issues/104
     // this.toolbar.addHandler('upload', this.uploadMedia.bind(this));
   }
 
   uploadMedia(value: string) {
     if (!value) { return; }
-    let fileInput = this.toolbar.container.querySelector('input.ql-image[type=file]');
+    let fileInput = this.toolbar.container.querySelector('input.ql-mediauploader[type=file]');
     if (fileInput == null) {
       fileInput = document.createElement('input');
       fileInput.setAttribute('type', 'file');
-      fileInput.classList.add('ql-image');
+      fileInput.classList.add('ql-mediauploader');
       fileInput.addEventListener('change', () => {
         const range = this.quill.getSelection(true);
         if (fileInput.files != null && fileInput.files[0] != null) {

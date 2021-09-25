@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
 import { FaConfig, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FaConfig, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AppRoutingModule,
     FormsModule,
     QuillModule.forRoot(),
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

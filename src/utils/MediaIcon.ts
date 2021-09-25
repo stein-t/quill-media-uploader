@@ -7,17 +7,26 @@ export type MediaIconType = {
   name: string,
   icon: string,
   size: string,
-  url: string
+  // url: string
 };
 
 class MediaIcon extends EmbedBlot {
   static create(value: MediaIconType) {
     const node = super.create(value);
-    (node as Element).className = `fas fa-file-${value.icon} fa-${value.size}`;
-    (node as Element).setAttribute('title', value.name);
-    (node as Element).setAttribute('data-icon', value.icon);
-    (node as Element).setAttribute('data-size', value.size);
-    (node as Element).setAttribute('data-url', this.sanitize(value.url));
+    const link = document.createElement('a');
+    link.className = 'medialink';
+    link.setAttribute('title', value.name);
+    link.setAttribute('data-filetype', value.icon);
+    link.setAttribute('href', 'https://www.google.de');
+    // link.setAttribute('data-url', this.sanitize(value.url));
+    const icon = document.createElement('i');
+    icon.className = `fas fa-file-${value.icon} fa-${value.size}`;
+    icon.setAttribute('data-size', value.size);
+    const caption = document.createElement('h5');
+    caption.textContent = value.name;
+    link.appendChild(icon);
+    link.appendChild(caption);
+    node.appendChild(link);
     return node;
   }
 
@@ -25,17 +34,20 @@ class MediaIcon extends EmbedBlot {
     return sanitize(url, ['http', 'https', 'data']) ? url : '//:0';
   }
 
-  static value(domNode: Element) {
-    const value: MediaIconType = {
-      name: domNode.getAttribute('title'),
-      icon: domNode.getAttribute('data-icon'),
-      size: domNode.getAttribute('data-size'),
-      url: domNode.getAttribute('data-url')
+  static value(domNode: Element): MediaIconType {
+    const link = domNode.firstElementChild.firstElementChild;
+    const icon = domNode.firstElementChild.firstElementChild.firstElementChild;
+    const value = {
+      name: link.getAttribute('title'),
+      icon: link.getAttribute('data-filetype'),
+      size: icon.getAttribute('data-size'),
+      // url: domNode.getAttribute('data-url')
     };
     return value;
   }
 }
 MediaIcon.blotName = 'mediaicon';
-MediaIcon.tagName = 'i';
+MediaIcon.tagName = 'span';
+MediaIcon.className = 'mediaicon';
 
 export default MediaIcon;
