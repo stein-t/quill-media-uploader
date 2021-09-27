@@ -1,13 +1,12 @@
 import Quill from 'quill';
-import * as Parchment from 'parchment';
-const EmbedBlot = Quill.import('blots/embed') as typeof Parchment.default.Embed;
+const EmbedBlot = Quill.import('blots/embed');
 import { sanitize } from 'quill/formats/link';
 
 export type MediaIconType = {
   name: string,
   icon: string,
   size: string,
-  // url: string
+  url: string
 };
 
 class MediaIcon extends EmbedBlot {
@@ -18,7 +17,9 @@ class MediaIcon extends EmbedBlot {
     link.setAttribute('title', value.name);
     link.setAttribute('data-filetype', value.icon);
     link.setAttribute('href', 'https://www.google.de');
-    // link.setAttribute('data-url', this.sanitize(value.url));
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener');
+    link.setAttribute('data-url', this.sanitize(value.url));
     const icon = document.createElement('i');
     icon.className = `fas fa-file-${value.icon} fa-${value.size}`;
     icon.setAttribute('data-size', value.size);
@@ -41,7 +42,7 @@ class MediaIcon extends EmbedBlot {
       name: link.getAttribute('title'),
       icon: link.getAttribute('data-filetype'),
       size: icon.getAttribute('data-size'),
-      // url: domNode.getAttribute('data-url')
+      url: domNode.getAttribute('data-url')
     };
     return value;
   }

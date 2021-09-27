@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import Quill from 'quill';
-import MediaIcon from 'src/utils/MediaIcon';
-import MediaUploader from 'src/utils/MediaUploader';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +13,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    Quill.register('formats/mediaicon', MediaIcon );
-    Quill.register('modules/mediaUploader', MediaUploader);
   }
 
   ngAfterViewInit() {
@@ -52,7 +48,11 @@ export class AppComponent implements OnInit, AfterViewInit {
             }
           }
         },
-        mediaUploader: { }
+        mediaUploader: {
+          translate: (key: string) => {
+            return key;
+          }
+        }
       }
     });
   }

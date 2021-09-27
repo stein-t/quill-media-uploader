@@ -1,15 +1,11 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 @import '~bootstrap/scss/bootstrap';
 
-* {
-  box-sizing: border-box;
-}
-
 /* ==========================================================================
     QuillEditor FileUploadTool DropDownMenu
    ========================================================================== */
 
-.ql-snow .ql-picker.ql-upload > .ql-picker-label > svg {
+   .ql-snow .ql-picker.ql-upload > .ql-picker-label > svg {
     display: none;
 }
 
@@ -111,7 +107,7 @@ input.ql-mediauploader[type=file] {
   display: none;
 }
 
-.ql-snow > .ql-editor .mediaicon {
+.mediaicon {
   display: inline-flex;
   transition: transform 200ms, box-shadow 200ms, background-color 200ms;
   text-align: center;
@@ -119,16 +115,16 @@ input.ql-mediauploader[type=file] {
   width: 7em;
 }
 
-.ql-snow > .ql-editor .mediaicon > span {
+.mediaicon > span {
   width: 100%;
 }
 
-.ql-snow > .ql-editor .mediaicon:hover {
+.mediaicon:hover {
   background-color: #eeeeee;
 }
 
-.ql-snow > .ql-editor .mediaicon a h5,
-.ql-snow > .ql-editor .mediaicon a h6 {
+.mediaicon a.medialink h5,
+.mediaicon a.medialink h6 {
   color: black;
   margin: 0 5px;
   padding: 10px 0;
@@ -136,35 +132,36 @@ input.ql-mediauploader[type=file] {
   overflow: hidden;
 }
 
-.ql-snow > .ql-editor .mediaicon a.medialink i {
+.mediaicon a.medialink i {
   display: block;
   padding-top: 10px;
 }
 
-.ql-snow > .ql-editor .mediaicon a {
+.ql-editor .mediaicon a.medialink,
+.mediaicon a.medialink {
   color: #3c8dbc;
   text-decoration: none;
 }
 
-.ql-snow > .ql-editor .mediaicon a[data-filetype="image"] {
+.mediaicon a.medialink[data-filetype="image"] {
   color: #3c8dbc;
 }
-.ql-snow > .ql-editor .mediaicon a[data-filetype="audio"] {
-  color: #bbb016;
+.mediaicon a.medialink[data-filetype="audio"] {
+  color: #f7a600;
 }
-.ql-snow > .ql-editor .mediaicon a[data-filetype="video"] {
+.mediaicon a.medialink[data-filetype="video"] {
   color: #527182;
 }
-.ql-snow > .ql-editor .mediaicon a[data-filetype="pdf"] {
+.mediaicon a.medialink[data-filetype="pdf"] {
   color: #ff0000;
 }
-.ql-snow > .ql-editor .mediaicon a[data-filetype="word"] {
+.mediaicon a.medialink[data-filetype="word"] {
   color: #2b579a;
 }
-.ql-snow > .ql-editor .mediaicon a[data-filetype="excel"] {
+.mediaicon a.medialink[data-filetype="excel"] {
   color: #217346;
 }
-.ql-snow > .ql-editor .mediaicon a[data-filetype="powerpoint"] {
+.mediaicon a.medialink[data-filetype="powerpoint"] {
   color: #d24726;
 }
 

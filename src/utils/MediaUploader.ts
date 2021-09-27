@@ -1,6 +1,7 @@
 import Quill from 'quill';
 const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
+import MediaIcon from './MediaIcon';
 
 
 class MediaUploader {
@@ -20,6 +21,10 @@ class MediaUploader {
 
     // ISSUE: addHandler does not work for non-existent handler: https://github.com/KillerCodeMonkey/ngx-quill/issues/104
     // this.toolbar.addHandler('upload', this.uploadMedia.bind(this));
+  }
+
+  static register() {
+    Quill.register('formats/mediaicon', MediaIcon );
   }
 
   uploadMedia(value: string) {
@@ -75,7 +80,7 @@ class MediaUploader {
   private getMediaType(fileType: string, options: any): string {
     const mainTypeMatch = fileType.match(/^(\w+)\//);
     let mainType: string;
-    if (mainTypeMatch){
+    if (mainTypeMatch) {
       mainType = mainTypeMatch[1];
     }
     let result: string;
@@ -105,7 +110,7 @@ class MediaUploader {
     const uploadPickerItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll('.ql-upload .ql-picker-item');
     uploadPickerItems.forEach(item => {
         const label = document.createElement('span');
-        label.textContent = item.dataset.value;
+        label.textContent = typeof this.options.translate === 'function' ? this.options.translate(item.dataset.value) : item.dataset.value;
         item.appendChild(label);
     });
   }
