@@ -23,7 +23,8 @@ class MediaIcon extends EmbedBlot {
     const icon = document.createElement('i');
     icon.className = `fas fa-file-${value.icon} fa-${value.size}`;
     icon.setAttribute('data-size', value.size);
-    const caption = document.createElement('h5');
+    const caption = document.createElement('span');
+    caption.className = 'caption';
     caption.textContent = value.name;
     link.appendChild(icon);
     link.appendChild(caption);

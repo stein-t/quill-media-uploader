@@ -103,16 +103,22 @@
   max-width: 100%;
 }
 
+/* ==========================================================================
+    QuillEditor Media Icon
+   ========================================================================== */
+
 input.ql-mediauploader[type=file] {
   display: none;
 }
 
 .mediaicon {
+  font-size: 0.8em;
+  line-height: 1;
   display: inline-flex;
   transition: transform 200ms, box-shadow 200ms, background-color 200ms;
   text-align: center;
   vertical-align: middle;
-  width: 7em;
+  width: 5em;
 }
 
 .mediaicon > span {
@@ -120,21 +126,22 @@ input.ql-mediauploader[type=file] {
 }
 
 .mediaicon:hover {
-  background-color: #eeeeee;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.mediaicon a.medialink h5,
-.mediaicon a.medialink h6 {
+.mediaicon a.medialink span.caption {
+  font-size: 1.1em;
+  display: block;
   color: black;
-  margin: 0 5px;
-  padding: 10px 0;
+  margin: 0 0.3em;
+  padding: 0.3em 0;
   white-space: nowrap;
   overflow: hidden;
 }
 
 .mediaicon a.medialink i {
   display: block;
-  padding-top: 10px;
+  padding-top: 0.2em;
 }
 
 .ql-editor .mediaicon a.medialink,
