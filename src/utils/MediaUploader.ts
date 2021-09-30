@@ -1,7 +1,10 @@
-import Quill from 'quill';
+import { HttpEvent } from '@angular/common/http';
+import Quill, { RangeStatic } from 'quill';
 const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
-import MediaIcon from './MediaIcon';
+import { Observable } from 'rxjs';
+const EmbedBlot = Quill.import('blots/embed');
+import MediaIconBlot, { IMediaIconType } from './MediaIcon';
 
 
 class MediaUploader {
@@ -10,11 +13,15 @@ class MediaUploader {
 
   constructor(
     protected quill: Quill,
-    protected options: any
+    protected options: {
+      iconSize?: string, mimetypes: any, translate?: (key: string) => string,
+      // upload: (file: File) => Observable<HttpEvent<string>>
+      upload: (file: File) => Observable<string>
+    }
   ) {
     this.options = Object.assign(MediaUploader.DEFAULTS, this.options);
     if (typeof this.options.upload !== 'function') {
-      console.warn('[Missing config] upload function that returns a promise is required');
+      console.warn('[Missing config] upload function that returns an observable is required');
     }
     this.toolbar = this.quill.getModule('toolbar');
     this.layout();
@@ -24,7 +31,7 @@ class MediaUploader {
   }
 
   static register() {
-    Quill.register('formats/mediaicon', MediaIcon );
+    Quill.register('formats/mediaicon', MediaIconBlot );
   }
 
   uploadMedia(value: string) {
@@ -34,7 +41,7 @@ class MediaUploader {
       fileInput = document.createElement('input');
       fileInput.setAttribute('type', 'file');
       fileInput.classList.add('ql-mediauploader');
-      fileInput.addEventListener('change', () => {
+      fileInput.onchange = () => {
         const range = this.quill.getSelection(true);
         if (fileInput.files != null && fileInput.files[0] != null) {
           const file = fileInput.files[0];
@@ -43,22 +50,25 @@ class MediaUploader {
             console.warn(`File type ${file.type} not supported!`);
             return;
           }
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const blot =
-              value === 'image' ? { image: e.target.result } :
-              { mediaicon: { name: file.name, icon: `${value}`, size: this.options.iconSize, url: e.target.result } };
-            this.quill.updateContents(new Delta()
-              .retain(range.index)
-              .delete(range.length)
-              .insert(blot)
-            , Emitter.sources.USER);
-            this.quill.setSelection(range.index + 1, Emitter.sources.SILENT);
-          };
-          reader.readAsDataURL(file);
+          if (value === 'image') {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const blot = { image: e.target.result };
+              this.updateContent(range, blot);
+            };
+            reader.readAsDataURL(file);
+          } else {
+            const blot: { mediaicon: IMediaIconType} = {
+              mediaicon: {
+                name: file.name, icon: `${value}`, size: this.options.iconSize,
+                file, upload: this.options.upload
+              }
+            };
+            this.updateContent(range, blot);
+          }
         }
         fileInput.value = '';
-      });
+      };
       this.toolbar.container.appendChild(fileInput);
     }
 
@@ -67,6 +77,14 @@ class MediaUploader {
       this.getMimetypes(value).join(', ')
     );
     fileInput.click();
+  }
+
+  updateContent(range: RangeStatic, blot: typeof EmbedBlot) {
+    this.quill.updateContents(
+      new Delta().retain(range.index).delete(range.length).insert(blot),
+      Emitter.sources.USER
+    );
+    this.quill.setSelection(range.index + 1, Emitter.sources.SILENT);
   }
 
   private getMimetypes(value: string): string[] {

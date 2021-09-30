@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import Quill from 'quill';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +12,9 @@ import Quill from 'quill';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'TestAngularQuill';
 
-  constructor(private elem: ElementRef) {
+  constructor(
+    private elem: ElementRef,
+    private http: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -49,11 +54,18 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         },
         mediaUploader: {
-          translate: (key: string) => {
-            return key;
+          upload: (file: File) => {
+            // const url = 'TEST';
+            // const formData = new FormData();
+            // formData.append('uploadedFile', file);
+            // return this.http.post(
+            //   url, formData, { responseType: 'text' }
+            // );
+            return of('https://www.google.de').pipe(delay(Math.floor(Math.random() * (10000 - 1000 + 1) + 1000)));
           }
         }
       }
     });
   }
 }
+

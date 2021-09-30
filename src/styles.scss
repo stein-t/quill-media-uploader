@@ -107,84 +107,113 @@
     QuillEditor Media Icon
    ========================================================================== */
 
-input.ql-mediauploader[type=file] {
-  display: none;
-}
+   input.ql-mediauploader[type=file] {
+    display: none;
+  }
 
-.mediaicon {
-  font-size: 0.8em;
-  line-height: 1;
-  display: inline-flex;
-  transition: transform 200ms, box-shadow 200ms, background-color 200ms;
-  text-align: center;
-  vertical-align: middle;
-  width: 5em;
-}
+  span.mediaicon {
+    font-size: 0.8em;
+    line-height: 1.1;
+    display: inline-flex;
+    transition: transform 200ms, box-shadow 200ms, background-color 200ms;
+    text-align: center;
+    vertical-align: middle;
+    width: 5em;
+    position: relative;
+  }
 
-.mediaicon > span {
-  width: 100%;
-}
+  span.mediaicon > span {
+    width: 100%;
+  }
 
-.mediaicon:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
+  span.mediaicon:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 
-.mediaicon a.medialink span.caption {
-  font-size: 1.1em;
-  display: block;
-  color: black;
-  margin: 0 0.3em;
-  padding: 0.3em 0;
-  white-space: nowrap;
-  overflow: hidden;
-}
+  span.mediaicon a.medialink {
+    color: #3c8dbc;
+    text-decoration: none;
+  }
 
-.mediaicon a.medialink i {
-  display: block;
-  padding-top: 0.2em;
-}
+  span.mediaicon a.medialink[data-filetype="audio"] {
+    color: #f7a600;
+  }
+  span.mediaicon a.medialink[data-filetype="video"] {
+    color: #527182;
+  }
+  span.mediaicon a.medialink[data-filetype="pdf"] {
+    color: #ff0000;
+  }
+  span.mediaicon a.medialink[data-filetype="word"] {
+    color: #2b579a;
+  }
+  span.mediaicon a.medialink[data-filetype="excel"] {
+    color: #217346;
+  }
+  span.mediaicon a.medialink[data-filetype="powerpoint"] {
+    color: #d24726;
+  }
 
-.ql-editor .mediaicon a.medialink,
-.mediaicon a.medialink {
-  color: #3c8dbc;
-  text-decoration: none;
-}
+  span.mediaicon a.medialink i {
+    display: block;
+    padding-top: 0.2em;
+  }
 
-.mediaicon a.medialink[data-filetype="image"] {
-  color: #3c8dbc;
-}
-.mediaicon a.medialink[data-filetype="audio"] {
-  color: #f7a600;
-}
-.mediaicon a.medialink[data-filetype="video"] {
-  color: #527182;
-}
-.mediaicon a.medialink[data-filetype="pdf"] {
-  color: #ff0000;
-}
-.mediaicon a.medialink[data-filetype="word"] {
-  color: #2b579a;
-}
-.mediaicon a.medialink[data-filetype="excel"] {
-  color: #217346;
-}
-.mediaicon a.medialink[data-filetype="powerpoint"] {
-  color: #d24726;
-}
+  span.mediaicon a.medialink span.caption {
+    font-size: 1.1em;
+    display: block;
+    color: black;
+    margin: 0 0.3em;
+    padding: 0.3em 0;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
-.mediaicon.drag {
-  transform: scale(1.05);
-  box-shadow: 0px 0px 10px 1px lightgrey;
-}
+  span.mediaicon.uploading > span {
+    filter: blur(0.5px);
+    opacity: 0.5;
+  }
 
-:host.drag .medialink:after {
-  font-family: 'FontAwesome';
-  content: "\F093";
-  opacity: 0.2;
-  position: absolute;
-  top: 1px;
-  font-size: 4em;
-  text-align: center;
-  width: 100%;
-  display: table-cell;
-}
+  span.mediaicon.uploading {
+    pointer-events: none;
+  }
+
+  span.mediaicon.uploading::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top: 47%;
+    left: 50%;
+    width: 2.8em;
+    height: 2.8em;
+    margin-top: -1.4em;
+    margin-left: -1.4em;
+    border-radius: 50%;
+    border: 0.3em solid #ccc;
+    border-top-color: #1e986c;
+    z-index: 1;
+    -webkit-animation: spinner 0.6s linear infinite;
+    animation: spinner 0.6s linear infinite;
+  }
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  span.mediaicon.drag {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 10px 1px lightgrey;
+  }
+
+  :host.drag span.medialink:after {
+    font-family: 'FontAwesome';
+    content: "\F093";
+    opacity: 0.2;
+    position: absolute;
+    top: 1px;
+    font-size: 4em;
+    text-align: center;
+    width: 100%;
+    display: table-cell;
+  }
