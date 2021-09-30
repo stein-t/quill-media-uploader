@@ -1,8 +1,8 @@
-import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import Quill from 'quill';
 const EmbedBlot = Quill.import('blots/embed');
 import { sanitize } from 'quill/formats/link';
-import { Observable, Subscription, throwError } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 export interface IMediaIconType {
@@ -83,7 +83,7 @@ class MediaIconBlot extends EmbedBlot {
       this.domNode.classList.add('uploading');
       this.uploadSubscription = this.data.upload(this.data.file)
         .pipe(
-          catchError((err: HttpErrorResponse, c) => {
+          catchError((err: HttpErrorResponse) => {
             this.domNode.firstElementChild.removeChild(link);
             this.domNode.classList.remove('mediaicon');
             console.error(err.message);

@@ -4,7 +4,7 @@ const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
 import { Observable } from 'rxjs';
 const EmbedBlot = Quill.import('blots/embed');
-import MediaIconBlot, { IMediaIconType } from './MediaIcon';
+import MediaIconBlot, { IMediaIconType } from './media-icon-blot';
 
 
 class MediaUploader {

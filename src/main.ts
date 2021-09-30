@@ -4,7 +4,7 @@ import Quill from 'quill';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import MediaUploader from './utils/MediaUploader';
+import MediaUploader from './utils/quill-media/media-uploader';
 
 Quill.register('modules/mediaUploader', MediaUploader);
 
