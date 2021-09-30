@@ -1,28 +1,20 @@
-import { HttpEvent } from '@angular/common/http';
 import Quill, { RangeStatic } from 'quill';
 const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
-import { Observable } from 'rxjs';
 const EmbedBlot = Quill.import('blots/embed');
-import MediaIconBlot, { IMediaIconType } from './media-icon-blot';
+import MediaIconBlot from './media-icon-blot';
+import { MediaIconType, QuillMediaConfig, QuillMediaConfigDefaults } from './quill-media.interfaces';
 
 
 class MediaUploader {
-  static DEFAULTS: any;
+  static DEFAULTS: QuillMediaConfigDefaults;
   private toolbar: any;
 
   constructor(
     protected quill: Quill,
-    protected options: {
-      iconSize?: string, mimetypes: any, translate?: (key: string) => string,
-      // upload: (file: File) => Observable<HttpEvent<string>>
-      upload: (file: File) => Observable<string>
-    }
+    protected options: QuillMediaConfig
   ) {
     this.options = Object.assign(MediaUploader.DEFAULTS, this.options);
-    if (typeof this.options.upload !== 'function') {
-      console.warn('[Missing config] upload function that returns an observable is required');
-    }
     this.toolbar = this.quill.getModule('toolbar');
     this.layout();
 
@@ -58,9 +50,9 @@ class MediaUploader {
             };
             reader.readAsDataURL(file);
           } else {
-            const blot: { mediaicon: IMediaIconType} = {
+            const blot: { mediaicon: MediaIconType} = {
               mediaicon: {
-                name: file.name, icon: `${value}`, size: this.options.iconSize,
+                name: file.name, icon: `${value}`,
                 file, upload: this.options.upload
               }
             };
@@ -128,15 +120,19 @@ class MediaUploader {
     const uploadPickerItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll('.ql-upload .ql-picker-item');
     uploadPickerItems.forEach(item => {
         const label = document.createElement('span');
-        label.textContent = typeof this.options.translate === 'function' ? this.options.translate(item.dataset.value) : item.dataset.value;
+        label.textContent = this.options.translate ? this.options.translate(item.dataset.value) : item.dataset.value;
         item.appendChild(label);
     });
   }
 }
 
 MediaUploader.DEFAULTS = {
-  iconSize: '3x',
   mimetypes: {
+    media: {
+      image: ['image/*'],
+      audio: ['audio/*'],
+      video: ['video/*']
+    },
     image: ['image/*'],
     audio: ['audio/*'],
     video: ['video/*'],
@@ -145,7 +141,11 @@ MediaUploader.DEFAULTS = {
       word: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
       excel: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
       powerpoint: ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
-    }
+    },
+    pdf: ['application/pdf'],
+    word: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+    excel: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+    powerpoint: ['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
   }
 };
 
