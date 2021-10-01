@@ -3,12 +3,12 @@ const EmbedBlot = Quill.import('blots/embed');
 import { sanitize } from 'quill/formats/link';
 import { Subscription } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { MediaIconType } from './quill-media.interfaces';
+import { MediaIcon } from './quill-media.interfaces';
 
 class MediaIconBlot extends EmbedBlot {
   private uploadSubscription: Subscription;
 
-  static create(data: MediaIconType) {
+  static create(data: MediaIcon) {
     const node = super.create(data);
     if (!data) {
       return node;
@@ -37,41 +37,43 @@ class MediaIconBlot extends EmbedBlot {
     return node;
   }
 
-  static value(domNode: Element): MediaIconType {
+  static value(domNode: Element): MediaIcon {
     const link = domNode?.firstElementChild?.firstElementChild;
-    const settings: MediaIconType = {
+    const data: MediaIcon = {
       name: link?.getAttribute('title'),
       icon: link?.getAttribute('data-filetype'),
       url: link?.getAttribute('href')
     };
-    return settings;
+    return data;
   }
 
   private static sanitize(url) {
     return sanitize(url, ['http', 'https']) ? url : '//:0';
   }
 
-  constructor(private domNode: Element, private data: MediaIconType) {
+  constructor(private domNode: Element, private data: MediaIcon) {
     super(domNode);
-    if (data) {
-      this.upload();
-    }
   }
 
-  deleteAt(index, length) {
-    super.deleteAt(index, length);
+  attach() {
+    super.attach();
+    this.upload();
+  }
+
+  detach() {
     if (this.uploadSubscription) {
       this.uploadSubscription.unsubscribe();
-      this.reset();
     }
+    super.detach();
   }
 
   private upload() {
     const link = this.domNode?.firstElementChild?.firstElementChild;
-    if (this.data.file && this.data.upload) {
+    if (link && this.data.file && this.data.upload) {
       this.domNode.classList.add('uploading');
       this.uploadSubscription = this.data.upload(this.data.file)
         .pipe(
+          finalize(() => { this.reset(); console.log('FINALIZE'); }),
           catchError((err: any) => {
             this.domNode.classList.add('error');
             if (this.data.uploadError) {
@@ -80,17 +82,16 @@ class MediaIconBlot extends EmbedBlot {
             const message = 'UploadError';
             console.error(message, err);
             return message;
-          }),
-          finalize(() => this.reset())
+          })
         )
         .subscribe(value => {
           link.setAttribute('href', MediaIconBlot.sanitize(value));
-          this.domNode.classList.remove('uploading');
         });
     }
   }
 
   private reset() {
+    this.domNode.classList.remove('uploading');
     this.uploadProgress = null;
     this.uploadSubscription = null;
   }

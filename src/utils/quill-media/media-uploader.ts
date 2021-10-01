@@ -3,7 +3,7 @@ const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
 const EmbedBlot = Quill.import('blots/embed');
 import MediaIconBlot from './media-icon-blot';
-import { MediaIconType, QuillMediaConfig, QuillMediaConfigDefaults } from './quill-media.interfaces';
+import { MediaIcon, QuillMediaConfig, QuillMediaConfigDefaults } from './quill-media.interfaces';
 
 
 class MediaUploader {
@@ -50,7 +50,7 @@ class MediaUploader {
             };
             reader.readAsDataURL(file);
           } else {
-            const blot: { mediaicon: MediaIconType} = {
+            const blot: { mediaicon: MediaIcon} = {
               mediaicon: {
                 name: file.name, icon: `${value}`,
                 file, upload: this.options.upload

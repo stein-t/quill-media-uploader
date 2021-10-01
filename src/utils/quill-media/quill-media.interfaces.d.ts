@@ -1,7 +1,7 @@
 import { QuillModules } from "ngx-quill";
 import { Observable } from "rxjs";
 
-export interface MediaIconType {
+export interface MediaIcon {
   name: string;
   icon: string;
   url?: string;
