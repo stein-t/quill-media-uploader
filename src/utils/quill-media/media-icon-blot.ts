@@ -10,10 +10,9 @@ class MediaIconBlot extends EmbedBlot {
 
   static create(data: MediaIconType) {
     const node = super.create(data);
-    if (!data.url && !(data.file && data.upload)) {
+    if (!data) {
       return node;
     }
-    node.classList.add('mediaicon');
     const link = document.createElement('a');
     link.className = 'medialink';
     link.setAttribute('title', data.name);
@@ -30,15 +29,16 @@ class MediaIconBlot extends EmbedBlot {
     node.appendChild(link);
     if (data.url) {
       link.setAttribute('href', MediaIconBlot.sanitize(data.url));
-    } else {
+    } else if (data.file && data.upload) {
       node.classList.add('uploading');
+    } else {
+      node.classList.add('error');
     }
     return node;
   }
 
   static value(domNode: Element): MediaIconType {
     const link = domNode?.firstElementChild?.firstElementChild;
-    const icon = link?.firstElementChild;
     const settings: MediaIconType = {
       name: link?.getAttribute('title'),
       icon: link?.getAttribute('data-filetype'),
@@ -48,12 +48,14 @@ class MediaIconBlot extends EmbedBlot {
   }
 
   private static sanitize(url) {
-    return sanitize(url, ['http', 'https', 'data']) ? url : '//:0';
+    return sanitize(url, ['http', 'https']) ? url : '//:0';
   }
 
   constructor(private domNode: Element, private data: MediaIconType) {
     super(domNode);
-    this.upload();
+    if (data) {
+      this.upload();
+    }
   }
 
   deleteAt(index, length) {
@@ -71,13 +73,13 @@ class MediaIconBlot extends EmbedBlot {
       this.uploadSubscription = this.data.upload(this.data.file)
         .pipe(
           catchError((err: any) => {
-            this.domNode.firstElementChild.removeChild(link);
-            this.domNode.classList.remove('mediaicon');
+            this.domNode.classList.add('error');
             if (this.data.uploadError) {
               return this.data.uploadError(err);
             }
-            console.error(err);
-            return `UploadError`;
+            const message = 'UploadError';
+            console.error(message, err);
+            return message;
           }),
           finalize(() => this.reset())
         )
@@ -95,5 +97,6 @@ class MediaIconBlot extends EmbedBlot {
 }
 MediaIconBlot.blotName = 'mediaicon';
 MediaIconBlot.tagName = 'span';
+MediaIconBlot.className = 'mediaicon';
 
 export default MediaIconBlot;

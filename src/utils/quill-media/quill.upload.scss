@@ -129,13 +129,18 @@
     width: 100%;
   }
 
-  span.mediaicon:hover {
+  span.mediaicon:not(.error):not(.uploading):hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
 
   span.mediaicon a.medialink {
     color: #3c8dbc;
     text-decoration: none;
+  }
+
+  span.mediaicon.uploading a.medialink,
+  span.mediaicon.error a.medialink {
+    cursor: default;
   }
 
   span.mediaicon a.medialink[data-filetype="audio"] {
@@ -177,13 +182,8 @@
     opacity: 0.5;
   }
 
-  span.mediaicon.uploading {
-    pointer-events: none;
-  }
-
   span.mediaicon.uploading::before {
     content: "";
-    box-sizing: border-box;
     position: absolute;
     top: 47%;
     left: 50%;
@@ -194,6 +194,7 @@
     border-radius: 50%;
     border: 0.3em solid #ccc;
     border-top-color: #1e986c;
+    cursor: default;
     z-index: 1;
     -webkit-animation: spinner 0.6s linear infinite;
     animation: spinner 0.6s linear infinite;
@@ -202,6 +203,19 @@
     to {
       transform: rotate(360deg);
     }
+  }
+
+  span.mediaicon.error::before {
+    content: "\f06a";
+    color: 	#bb2124;
+    font-family: "Font Awesome 5 Free";
+    font-size: 2em;
+    font-weight: 900;
+    position: absolute;
+    top: 0.2em;
+    left: 0.1em;
+    cursor: default;
+    z-index: 1;
   }
 
   span.mediaicon.drag {
