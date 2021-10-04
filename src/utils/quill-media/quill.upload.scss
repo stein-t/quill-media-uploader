@@ -117,7 +117,7 @@
   span.mediaicon {
     font-size: 0.8em;
     line-height: 1.1;
-    display: inline-flex;
+    display: inline-block;
     transition: transform 200ms, box-shadow 200ms, background-color 200ms;
     text-align: center;
     vertical-align: middle;
@@ -127,6 +127,7 @@
 
   span.mediaicon > span {
     width: 100%;
+    float: left;
   }
 
   span.mediaicon:not(.error):not(.uploading):hover {

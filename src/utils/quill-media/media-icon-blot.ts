@@ -1,11 +1,11 @@
 import Quill from 'quill';
-const EmbedBlot = Quill.import('blots/embed');
+const Embed = Quill.import('blots/embed');
 import { sanitize } from 'quill/formats/link';
 import { Subscription } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { MediaIcon } from './quill-media.interfaces';
 
-class MediaIconBlot extends EmbedBlot {
+class MediaIconBlot extends Embed {
   private uploadSubscription: Subscription;
 
   static create(data: MediaIcon) {
@@ -57,23 +57,21 @@ class MediaIconBlot extends EmbedBlot {
 
   attach() {
     super.attach();
+    // if (this.data.history) { this.data.history.ignoreChange = true; }
     this.upload();
   }
 
   detach() {
-    if (this.uploadSubscription) {
-      this.uploadSubscription.unsubscribe();
-    }
     super.detach();
+    this.reset();
   }
 
   private upload() {
-    const link = this.domNode?.firstElementChild?.firstElementChild;
-    if (link && this.data.file && this.data.upload) {
+    if (this.data.file && this.data.upload) {
       this.domNode.classList.add('uploading');
       this.uploadSubscription = this.data.upload(this.data.file)
         .pipe(
-          finalize(() => { this.reset(); console.log('FINALIZE'); }),
+          finalize(() => this.reset()),
           catchError((err: any) => {
             this.domNode.classList.add('error');
             if (this.data.uploadError) {
@@ -81,19 +79,30 @@ class MediaIconBlot extends EmbedBlot {
             }
             const message = 'UploadError';
             console.error(message, err);
+            this.reset();
             return message;
           })
         )
-        .subscribe(value => {
-          link.setAttribute('href', MediaIconBlot.sanitize(value));
+        .subscribe(url => {
+          const link = this.domNode?.firstElementChild?.firstElementChild;
+          if (link) {
+            link.setAttribute('href', MediaIconBlot.sanitize(url));
+          }
+          this.reset();
+          if (this.data.uploaded) {
+            this.data.uploaded(url);
+          }
         });
     }
   }
 
   private reset() {
-    this.domNode.classList.remove('uploading');
-    this.uploadProgress = null;
-    this.uploadSubscription = null;
+    if (this.uploadSubscription) {
+      this.domNode.classList.remove('uploading');
+      this.uploadSubscription.unsubscribe();
+      this.uploadSubscription = null;
+      // if (this.data.history) { this.data.history.ignoreChange = false; }
+    }
   }
 }
 MediaIconBlot.blotName = 'mediaicon';

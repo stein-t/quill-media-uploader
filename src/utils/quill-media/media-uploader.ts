@@ -1,7 +1,7 @@
 import Quill, { RangeStatic } from 'quill';
 const Delta = Quill.import('delta');
 import Emitter from 'quill/core/emitter';
-const EmbedBlot = Quill.import('blots/embed');
+const Embed = Quill.import('blots/embed');
 import MediaIconBlot from './media-icon-blot';
 import { MediaIcon, QuillMediaConfig, QuillMediaConfigDefaults } from './quill-media.interfaces';
 
@@ -24,6 +24,11 @@ class MediaUploader {
 
   static register() {
     Quill.register('formats/mediaicon', MediaIconBlot );
+  }
+
+  static sanitize(ret: string) {
+    // remove uploading icons
+    return ret.replace(/mediaicon uploading/g, 'mediaicon error');
   }
 
   uploadMedia(value: string) {
@@ -52,8 +57,9 @@ class MediaUploader {
           } else {
             const blot: { mediaicon: MediaIcon} = {
               mediaicon: {
-                name: file.name, icon: `${value}`,
-                file, upload: this.options.upload
+                name: file.name, icon: `${value}`, file,
+                upload: this.options.upload, uploaded: this.options.uploaded,
+                // history
               }
             };
             this.updateContent(range, blot);
@@ -71,11 +77,14 @@ class MediaUploader {
     fileInput.click();
   }
 
-  updateContent(range: RangeStatic, blot: typeof EmbedBlot) {
+  updateContent(range: RangeStatic, blot: typeof Embed) {
+    const history = this.quill.getModule('history');
+    history.cutoff();
     this.quill.updateContents(
       new Delta().retain(range.index).delete(range.length).insert(blot),
       Emitter.sources.USER
     );
+    history.cutoff();
     this.quill.setSelection(range.index + 1, Emitter.sources.SILENT);
   }
 

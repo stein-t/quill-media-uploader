@@ -7,6 +7,7 @@ export interface MediaIcon {
   url?: string;
   file?: File;
   upload?: (file: File) => Observable<string>;
+  uploaded?: (url: string) => void;
   uploadError?: (err: any) => string;
 }
 
@@ -17,8 +18,9 @@ export interface QuillMediaConfigDefaults {
 
 export interface QuillMediaConfig extends Omit<QuillMediaConfigDefaults, 'mimetypes'> {
   mimetypes?: QuillMimeTypes,
-  upload: (file: File) => Observable<string>,
   translate?: (key: string) => string,
+  upload: (file: File) => Observable<string>,
+  uploaded?: (url: string) => void;
   uploadError?: (err: any) => string
 }
 

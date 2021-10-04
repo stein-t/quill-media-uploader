@@ -4,8 +4,10 @@ import Quill from 'quill';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import MediaHistory from './utils/quill-media/media-history';
 import MediaUploader from './utils/quill-media/media-uploader';
 
+Quill.register('modules/history', MediaHistory);
 Quill.register('modules/mediaUploader', MediaUploader);
 
 if (environment.production) {
