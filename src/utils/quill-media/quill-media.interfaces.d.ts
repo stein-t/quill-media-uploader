@@ -1,75 +1,77 @@
 import { QuillModules } from "ngx-quill";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
-export interface MediaIcon {
-  name: string;
-  icon: string;
-  url?: string;
-  file?: File;
-  upload?: (file: File) => Observable<string>;
-  uploaded?: (url: string) => void;
-  uploadError?: (err: any) => string;
+export interface QuillMediaBaseConfig {
+    iconSize?: string;
+    upload?: (file: File) => Observable<any>;
+    uploadSuccess?: (file: string, value: any) => void;
+    uploadError?: (file: string, err: any) => void;
+    uploadCancelled?: (file: string) => void;
 }
 
-export interface QuillMediaConfigDefaults {
-  [key: string]: any;
-  mimetypes: QuillMimeTypes
+export interface QuillMediaConfig extends QuillMediaBaseConfig {
+    mimetypes?: QuillMimeTypes;
+    translate?: (key: string) => string;
+    clickHandler?: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, file: string, value: any) => any;
 }
 
-export interface QuillMediaConfig extends Omit<QuillMediaConfigDefaults, 'mimetypes'> {
-  mimetypes?: QuillMimeTypes,
-  translate?: (key: string) => string,
-  upload: (file: File) => Observable<string>,
-  uploaded?: (url: string) => void;
-  uploadError?: (err: any) => string
+export interface MediaIcon extends QuillMediaBaseConfig {
+    name: string;
+    type: string;
+    value?: any;
+    file?: File;
+    iconClass?: string;
+    $cancelUploading?: Observable<boolean>;
+    $uploadingState?: Subject<boolean>;
+    $dispose?: Observable<boolean>;
 }
 
 // take from QuillToolbarConfig
 // ISSUE: recommend QuillToolbarConfig to be implemented as a type
 export declare type QuillBaseToolbarConfig = {
-  indent?: string;
-  list?: string;
-  direction?: string;
-  header?: number | Array<boolean | number>;
-  color?: string[] | string;
-  background?: string[] | string;
-  align?: string[] | string;
-  script?: string;
-  font?: string[] | string;
-  size?: Array<boolean | string>;
+    indent?: string;
+    list?: string;
+    direction?: string;
+    header?: number | Array<boolean | number>;
+    color?: string[] | string;
+    background?: string[] | string;
+    align?: string[] | string;
+    script?: string;
+    font?: string[] | string;
+    size?: Array<boolean | string>;
 }
 
 export declare type QuillMediaBaseToolbarConfig = QuillBaseToolbarConfig & {
-  upload?: Array<boolean | string>;
+    upload?: Array<boolean | string>;
 }
 
 export declare type QuillMediaToolbarConfig = Array<Array<string | QuillMediaBaseToolbarConfig>>;
 
 export interface QuillMediaModules extends QuillModules {
-  toolbar?: QuillMediaToolbarConfig | string | {
-      container?: string | string[] | QuillMediaToolbarConfig;
-      handlers?: {
-          [key: string]: any;
-      };
-  } | boolean;
-  mediaUploader: QuillMediaConfig
+    toolbar?: QuillMediaToolbarConfig | string | {
+        container?: string | string[] | QuillMediaToolbarConfig;
+        handlers?: {
+            [key: string]: any;
+        };
+    } | boolean;
+    mediaUploader: QuillMediaConfig
 }
 
 export declare type QuillMediaMimeTypes = {
-  image?: string[] | string,
-  audio?: string[] | string,
-  video?: string[] | string,
+    image?: string[] | string,
+    audio?: string[] | string,
+    video?: string[] | string,
 }
 
-export declare type QuillDocumentMimeTypes = {
-  pdf?: string[] | string,
-  word?: string[] | string,
-  excel?: string[] | string,
-  powerpoint?: string[] | string
+export declare type QuillFileMimeTypes = {
+    pdf?: string[] | string,
+    word?: string[] | string,
+    excel?: string[] | string,
+    powerpoint?: string[] | string
 }
 
-export declare type QuillMimeTypes = QuillMediaMimeTypes & QuillDocumentMimeTypes & {
-  media?: QuillMediaMimeTypes,
-  document?: QuillDocumentMimeTypes
+export declare type QuillMimeTypes = QuillMediaMimeTypes & QuillFileMimeTypes & {
+    media?: QuillMediaMimeTypes,
+    file?: QuillFileMimeTypes
 }
 

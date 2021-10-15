@@ -1,5 +1,5 @@
 /* ==========================================================================
-    QuillEditor FileUploadTool DropDownMenu
+    QuillEditor UploadTool DropDownMenu
    ========================================================================== */
 
    .ql-snow .ql-picker.ql-upload > .ql-picker-label > svg {
@@ -81,20 +81,20 @@
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="video"]::before {
     content: "\f1c8";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="document"]::before {
+.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="file"]::before {
     content: "\f15b";
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="pdf"]::before {
-  content: "\f1c1";
+    content: "\f1c1";
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="word"]::before {
-  content: "\f1c2";
+    content: "\f1c2";
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="excel"]::before {
-  content: "\f1c3";
+    content: "\f1c3";
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="powerpoint"]::before {
-  content: "\f1c4";
+    content: "\f1c4";
 }
 
 .ql-snow > .ql-editor .fa,
@@ -103,18 +103,18 @@
 .ql-snow > .ql-editor .fal,
 .ql-snow > .ql-editor .fad,
 .ql-snow > .ql-editor .fab {
-  max-width: 100%;
+    max-width: 100%;
 }
 
 /* ==========================================================================
     QuillEditor Media Icon
    ========================================================================== */
 
-   input.ql-mediauploader[type=file] {
-    display: none;
-  }
+input.ql-mediauploader[type=file] {
+  display: none;
+}
 
-  span.mediaicon {
+div.mediaicon {
     font-size: 0.8em;
     line-height: 1.1;
     display: inline-block;
@@ -123,52 +123,52 @@
     vertical-align: middle;
     width: 5em;
     position: relative;
-  }
+}
 
-  span.mediaicon > span {
+div.mediaicon > span {
     width: 100%;
     float: left;
-  }
+}
 
-  span.mediaicon:not(.error):not(.uploading):hover {
+div.mediaicon:not(.error):not(.uploading):hover {
     background-color: rgba(0, 0, 0, 0.1);
-  }
+}
 
-  span.mediaicon a.medialink {
+div.mediaicon a.medialink {
     color: #3c8dbc;
     text-decoration: none;
-  }
+}
 
-  span.mediaicon.uploading a.medialink,
-  span.mediaicon.error a.medialink {
+div.mediaicon.uploading a.medialink,
+div.mediaicon.error a.medialink {
     cursor: default;
-  }
+}
 
-  span.mediaicon a.medialink[data-filetype="audio"] {
+div.mediaicon a.medialink[data-type="audio"] {
     color: #f7a600;
-  }
-  span.mediaicon a.medialink[data-filetype="video"] {
+}
+div.mediaicon a.medialink[data-type="video"] {
     color: #527182;
-  }
-  span.mediaicon a.medialink[data-filetype="pdf"] {
+}
+div.mediaicon a.medialink[data-type="pdf"] {
     color: #ff0000;
-  }
-  span.mediaicon a.medialink[data-filetype="word"] {
+}
+div.mediaicon a.medialink[data-type="word"] {
     color: #2b579a;
-  }
-  span.mediaicon a.medialink[data-filetype="excel"] {
+}
+div.mediaicon a.medialink[data-type="excel"] {
     color: #217346;
-  }
-  span.mediaicon a.medialink[data-filetype="powerpoint"] {
+}
+div.mediaicon a.medialink[data-type="powerpoint"] {
     color: #d24726;
-  }
+}
 
-  span.mediaicon a.medialink i {
+div.mediaicon a.medialink i {
     display: block;
     padding-top: 0.2em;
-  }
+}
 
-  span.mediaicon a.medialink span.caption {
+div.mediaicon a.medialink span.caption {
     font-size: 1.1em;
     display: block;
     color: black;
@@ -176,14 +176,14 @@
     padding: 0.3em 0;
     white-space: nowrap;
     overflow: hidden;
-  }
+}
 
-  span.mediaicon.uploading > span {
+div.mediaicon.uploading > span {
     filter: blur(0.5px);
     opacity: 0.5;
-  }
+}
 
-  span.mediaicon.uploading::before {
+div.mediaicon.uploading::before {
     content: "";
     position: absolute;
     top: 47%;
@@ -199,14 +199,14 @@
     z-index: 1;
     -webkit-animation: spinner 0.6s linear infinite;
     animation: spinner 0.6s linear infinite;
-  }
-  @keyframes spinner {
+}
+@keyframes spinner {
     to {
       transform: rotate(360deg);
     }
-  }
+}
 
-  span.mediaicon.error::before {
+div.mediaicon.error::before {
     content: "\f06a";
     color: 	#bb2124;
     font-family: "Font Awesome 5 Free";
@@ -217,21 +217,21 @@
     left: 0.1em;
     cursor: default;
     z-index: 1;
-  }
+}
 
-  span.mediaicon.drag {
-    transform: scale(1.05);
-    box-shadow: 0px 0px 10px 1px lightgrey;
-  }
+// div.mediaicon.drag {
+//     transform: scale(1.05);
+//     box-shadow: 0px 0px 10px 1px lightgrey;
+// }
 
-  :host.drag span.medialink:after {
-    font-family: 'FontAwesome';
-    content: "\F093";
-    opacity: 0.2;
-    position: absolute;
-    top: 1px;
-    font-size: 4em;
-    text-align: center;
-    width: 100%;
-    display: table-cell;
-  }
+// :host.drag span.medialink:after {
+//     font-family: 'FontAwesome';
+//     content: "\F093";
+//     opacity: 0.2;
+//     position: absolute;
+//     top: 1px;
+//     font-size: 4em;
+//     text-align: center;
+//     width: 100%;
+//     display: table-cell;
+// }
