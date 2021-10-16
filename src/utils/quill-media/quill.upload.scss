@@ -110,65 +110,74 @@
     QuillEditor Media Icon
    ========================================================================== */
 
-input.ql-mediauploader[type=file] {
+input.ql-mediauploader[type=file],
+.ql-snow .ql-editor input.ql-mediauploader[type=file] {
   display: none;
 }
 
-div.mediaicon {
+span.ql-media-root,
+.ql-snow .ql-editor span.ql-media-root {
+    position: relative;
+}
+
+span.ql-media-root.ql-media-icon,
+.ql-snow .ql-editor span.ql-media-root.ql-media-icon {
     font-size: 0.8em;
     line-height: 1.1;
     display: inline-block;
-    transition: transform 200ms, box-shadow 200ms, background-color 200ms;
     text-align: center;
     vertical-align: middle;
     width: 5em;
     position: relative;
 }
 
-div.mediaicon > span {
-    width: 100%;
+span.ql-media-root.ql-media-icon > span,
+.ql-snow .ql-editor span.ql-media-root.ql-media-icon > span {
     float: left;
+    width: 100%;
 }
 
-div.mediaicon:not(.error):not(.uploading):hover {
+.ql-media-root.ql-active:hover,
+.ql-snow .ql-editor .ql-media-root.ql-active:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-div.mediaicon a.medialink {
-    color: #3c8dbc;
-    text-decoration: none;
-}
-
-div.mediaicon.uploading a.medialink,
-div.mediaicon.error a.medialink {
+.ql-media-root:not(.ql-active),
+.ql-snow .ql-editor .ql-media-root:not(.ql-active) {
     cursor: default;
 }
 
-div.mediaicon a.medialink[data-type="audio"] {
+a.ql-media,
+.ql-snow .ql-editor a.ql-media {
+    text-decoration: none;
+}
+
+span.ql-media-root a > i {
+    display: block;
+    padding-top: 0.2em;
+    color: #3c8dbc;
+}
+
+span.ql-media-root a[data-type="audio"] > i {
     color: #f7a600;
 }
-div.mediaicon a.medialink[data-type="video"] {
+span.ql-media-root a[data-type="video"] > i {
     color: #527182;
 }
-div.mediaicon a.medialink[data-type="pdf"] {
+span.ql-media-root a[data-type="pdf"] > i {
     color: #ff0000;
 }
-div.mediaicon a.medialink[data-type="word"] {
+span.ql-media-root a[data-type="word"] > i {
     color: #2b579a;
 }
-div.mediaicon a.medialink[data-type="excel"] {
+span.ql-media-root a[data-type="excel"] > i {
     color: #217346;
 }
-div.mediaicon a.medialink[data-type="powerpoint"] {
+span.ql-media-root a[data-type="powerpoint"] > i {
     color: #d24726;
 }
 
-div.mediaicon a.medialink i {
-    display: block;
-    padding-top: 0.2em;
-}
-
-div.mediaicon a.medialink span.caption {
+span.ql-media-root.ql-media-icon a.ql-media > span.caption {
     font-size: 1.1em;
     display: block;
     color: black;
@@ -178,12 +187,12 @@ div.mediaicon a.medialink span.caption {
     overflow: hidden;
 }
 
-div.mediaicon.uploading > span {
+.ql-media-root.uploading > span {
     filter: blur(0.5px);
     opacity: 0.5;
 }
 
-div.mediaicon.uploading::before {
+.ql-media-root.uploading::before {
     content: "";
     position: absolute;
     top: 47%;
@@ -206,7 +215,7 @@ div.mediaicon.uploading::before {
     }
 }
 
-div.mediaicon.error::before {
+.ql-media-root.ql-media-icon.error::before {
     content: "\f06a";
     color: 	#bb2124;
     font-family: "Font Awesome 5 Free";
@@ -219,12 +228,30 @@ div.mediaicon.error::before {
     z-index: 1;
 }
 
-// div.mediaicon.drag {
+.ql-media-root.ql-media-image a > span {
+    display: inline-block;
+    position: relative;
+}
+
+.ql-media-root.ql-media-image.error a > span::before {
+    content: "\f06a";
+    color: 	#bb2124;
+    font-family: "Font Awesome 5 Free";
+    font-size: 26px;
+    font-weight: 900;
+    position: absolute;
+    top: -5px;
+    right: 0;
+    cursor: default;
+    z-index: 1;
+}
+
+// div.ql-media.drag {
 //     transform: scale(1.05);
 //     box-shadow: 0px 0px 10px 1px lightgrey;
 // }
 
-// :host.drag span.medialink:after {
+// :host.drag div.ql-media:after {
 //     font-family: 'FontAwesome';
 //     content: "\F093";
 //     opacity: 0.2;

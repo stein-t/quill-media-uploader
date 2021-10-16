@@ -2,7 +2,6 @@ import { QuillModules } from "ngx-quill";
 import { Observable, Subject } from "rxjs";
 
 export interface QuillMediaBaseConfig {
-    iconSize?: string;
     upload?: (file: File) => Observable<any>;
     uploadSuccess?: (file: string, value: any) => void;
     uploadError?: (file: string, err: any) => void;
@@ -10,17 +9,32 @@ export interface QuillMediaBaseConfig {
 }
 
 export interface QuillMediaConfig extends QuillMediaBaseConfig {
+    iconSize?: string;
+    thumbnail?: ImageDimension;
     mimetypes?: QuillMimeTypes;
     translate?: (key: string) => string;
     clickHandler?: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, file: string, value: any) => any;
 }
 
-export interface MediaIcon extends QuillMediaBaseConfig {
+export interface MediaIconData extends QuillMediaBaseConfig {
     name: string;
     type: string;
+    iconSize?: string;
     value?: any;
     file?: File;
     iconClass?: string;
+    $cancelUploading?: Observable<boolean>;
+    $uploadingState?: Subject<boolean>;
+    $dispose?: Observable<boolean>;
+}
+
+export interface MediaImageData extends QuillMediaBaseConfig {
+    name: string;
+    type: string;
+    thumbnail?: ImageDimension;
+    value?: any;
+    file?: File;
+    src: string;
     $cancelUploading?: Observable<boolean>;
     $uploadingState?: Subject<boolean>;
     $dispose?: Observable<boolean>;
@@ -75,3 +89,9 @@ export declare type QuillMimeTypes = QuillMediaMimeTypes & QuillFileMimeTypes & 
     file?: QuillFileMimeTypes
 }
 
+export interface ImageDimension {
+    maxWidth?: string;
+    maxHeight?: string;
+    minWidth?: string;
+    minHeight?: string;
+}

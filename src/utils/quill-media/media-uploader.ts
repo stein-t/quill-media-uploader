@@ -4,7 +4,8 @@ const Delta = Quill.import("delta");
 import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
 import MediaIconBlot from "./media-icon-blot";
-import { MediaIcon, QuillMediaConfig } from "./quill-media.interfaces";
+import MediaImageBlot from "./media-image-blot";
+import { ImageDimension, MediaIconData, MediaImageData, QuillMediaConfig } from "./quill-media.interfaces";
 import * as $ from "jquery";
 
 class MediaUploader {
@@ -25,6 +26,7 @@ class MediaUploader {
 
     static register() {
         Quill.register("formats/mediaicon", MediaIconBlot);
+        Quill.register("formats/mediaimage", MediaImageBlot);
     }
 
     static sanitize(ret: string) {
@@ -37,7 +39,7 @@ class MediaUploader {
         clickHandler: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, file: string, value: any) => any
     ): any {
         event.preventDefault();
-        const link = $(event.target).closest("a.medialink");
+        const link = $(event.target).closest("a.ql-media");
         const value = MediaIconBlot.clickValue(link[0]);
         const file = link.attr("title");
         return clickHandler(event, file, value);
@@ -52,7 +54,7 @@ class MediaUploader {
         this.layout();
         if (this.options.clickHandler) {
             $(quill.root).on(
-              "click", "div.mediaicon:not(.uploading):not(.error) a.medialink",
+              "click", "a.ql-media.ql-active",
               event => MediaUploader.handleClick(event, this.options.clickHandler));
         }
     }
@@ -64,7 +66,7 @@ class MediaUploader {
         }
         this.disposeSubject.next(true);
         if (this.options.clickHandler) {
-            $(this.quill.root).off("click", "div.mediaicon:not(.uploading):not(.error) a.medialink");
+            $(this.quill.root).off("click", "a.ql-media.ql-active");
         }
     }
 
@@ -87,15 +89,31 @@ class MediaUploader {
                     const uploadingState = new BehaviorSubject<boolean>(false);
                     this.uploadingStates.push(uploadingState);
                     this.uploadingStateSubscription = uploadingState.subscribe(state => this.notifyUploadingState(state));
-                    const blot: { mediaicon: MediaIcon} = {
-                        mediaicon: {
-                            name: file.name, type: `${value}`, file, iconClass, iconSize: this.options.iconSize,
-                            upload: this.options.upload, uploadSuccess: this.options.uploadSuccess, uploadError: this.options.uploadError,
-                            uploadCancelled: this.options.uploadCancelled, $cancelUploading: this.$cancelUploading,
-                            $uploadingState: uploadingState, $dispose: this.$dispose
-                        }
-                    };
-                    this.updateContent(range, blot);
+                    if (value === "image") {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const blot: { mediaimage: MediaImageData} = {
+                                mediaimage: {
+                                    name: file.name, type: `${value}`, file, src: e.target.result as string, thumbnail: this.options.thumbnail,
+                                    upload: this.options.upload, uploadSuccess: this.options.uploadSuccess,
+                                    uploadError: this.options.uploadError, uploadCancelled: this.options.uploadCancelled,
+                                    $cancelUploading: this.$cancelUploading, $uploadingState: uploadingState, $dispose: this.$dispose
+                                }
+                            };
+                            this.updateContent(range, blot);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        const blot: { mediaicon: MediaIconData} = {
+                            mediaicon: {
+                                name: file.name, type: `${value}`, file, iconClass, iconSize: this.options.iconSize,
+                                upload: this.options.upload, uploadSuccess: this.options.uploadSuccess,
+                                uploadError: this.options.uploadError, uploadCancelled: this.options.uploadCancelled,
+                                $cancelUploading: this.$cancelUploading, $uploadingState: uploadingState, $dispose: this.$dispose
+                            }
+                        };
+                        this.updateContent(range, blot);
+                    }
                 }
                 fileInput.value = "";
             };
@@ -180,6 +198,12 @@ class MediaUploader {
 
 MediaUploader.DEFAULTS = {
     iconSize: "fa-3x",
+    thumbnail: {
+        maxWidth: "180px",
+        maxHeight: "60px",
+        minWidth: "10px",
+        minHeight: "10px"
+    },
     mimetypes: {
         image: ["image/*"],
         audio: ["audio/*"],
