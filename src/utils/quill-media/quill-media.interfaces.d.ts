@@ -1,4 +1,4 @@
-import { QuillModules } from "ngx-quill";
+import { QuillModules, QuillToolbarConfig } from "ngx-quill";
 import { Observable, Subject } from "rxjs";
 
 export interface QuillMediaBaseConfig {
@@ -40,26 +40,9 @@ export interface MediaImageData extends QuillMediaBaseConfig {
     $dispose?: Observable<boolean>;
 }
 
-// take from QuillToolbarConfig
-// ISSUE: recommend QuillToolbarConfig to be implemented as a type
-export declare type QuillBaseToolbarConfig = {
-    indent?: string;
-    list?: string;
-    direction?: string;
-    header?: number | Array<boolean | number>;
-    color?: string[] | string;
-    background?: string[] | string;
-    align?: string[] | string;
-    script?: string;
-    font?: string[] | string;
-    size?: Array<boolean | string>;
+export declare type QuillMediaToolbarConfig = QuillToolbarConfig & {
+    upload?: string[] | string;
 }
-
-export declare type QuillMediaBaseToolbarConfig = QuillBaseToolbarConfig & {
-    upload?: Array<boolean | string>;
-}
-
-export declare type QuillMediaToolbarConfig = Array<Array<string | QuillMediaBaseToolbarConfig>>;
 
 export interface QuillMediaModules extends QuillModules {
     toolbar?: QuillMediaToolbarConfig | string | {
@@ -71,22 +54,18 @@ export interface QuillMediaModules extends QuillModules {
     mediaUploader: QuillMediaConfig
 }
 
-export declare type QuillMediaMimeTypes = {
+export interface QuillMediaMimeTypes {
     image?: string[] | string,
     audio?: string[] | string,
     video?: string[] | string,
-}
-
-export declare type QuillFileMimeTypes = {
     pdf?: string[] | string,
     word?: string[] | string,
     excel?: string[] | string,
-    powerpoint?: string[] | string
+    powerpoint?: string[] | string,
 }
 
-export declare type QuillMimeTypes = QuillMediaMimeTypes & QuillFileMimeTypes & {
-    media?: QuillMediaMimeTypes,
-    file?: QuillFileMimeTypes
+export interface QuillMimeTypes extends QuillMediaMimeTypes {
+    [key: string]: string[] | string | QuillMediaMimeTypes;
 }
 
 export interface ImageDimension {

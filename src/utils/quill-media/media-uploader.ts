@@ -5,7 +5,7 @@ import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
 import MediaIconBlot from "./media-icon-blot";
 import MediaImageBlot from "./media-image-blot";
-import { MediaIconData, MediaImageData, QuillMediaConfig } from "./quill-media.interfaces";
+import { MediaIconData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "./quill-media.interfaces";
 import * as $ from "jquery";
 
 class MediaUploader {
@@ -151,13 +151,22 @@ class MediaUploader {
 
     private getMimetypes(value: string): string[] {
         let mimetypes = this.options.mimetypes[value];
-        if (!Array.isArray(mimetypes)) {
+        if (!(Array.isArray(mimetypes) || typeof mimetypes === "string")) {
             mimetypes = Object.entries(mimetypes).reduce((newObj, [key, val]) => newObj.concat(val), []);
         }
-        return mimetypes;
+        return Array.isArray(mimetypes) ? mimetypes : [mimetypes];
     }
 
-    private getMediaType(fileType: string, options: any): string {
+    private getMediaType(fileType: string, options: string[] | string | QuillMediaMimeTypes): string {
+        const compare = (value: string) => {
+            if (value === fileType) {
+                return true;
+            }
+            const match = value.match(/^(\w+)\/(.*)$/);
+            if (match && match[2] === "*" && match[1] === mainType) {
+                return true;
+            }
+        };
         const mainTypeMatch = fileType.match(/^(\w+)\//);
         let mainType: string;
         if (mainTypeMatch) {
@@ -169,14 +178,12 @@ class MediaUploader {
             const value = val[1];
             if (Array.isArray(value)) {
                 if (value.some(v => {
-                    if (fileType === v) {
-                        return true;
-                    }
-                    const match = v.match(/^(\w+)\/(.*)$/);
-                    if (match && match[2] === "*" && match[1] === mainType) {
-                        return true;
-                    }
+                    return compare(v);
                 })) {
+                    return result = key;
+                }
+            } else if (typeof value === "string") {
+                if (compare(value)) {
                     return result = key;
                 }
             } else {
@@ -213,15 +220,15 @@ MediaUploader.DEFAULTS = {
         return value[0].toUpperCase() + value.slice(1);     // capitalize first letter
     },
     mimetypes: {
-        image: ["image/*"],
-        audio: ["audio/*"],
-        video: ["video/*"],
-        pdf: ["application/pdf"],
+        image: "image/*",
+        audio: "audio/*",
+        video: "video/*",
+        pdf: "application/pdf",
         word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
         excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
         powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"],
         file: {
-            pdf: ["application/pdf"],
+            pdf: "application/pdf",
             word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
             excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
             powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
