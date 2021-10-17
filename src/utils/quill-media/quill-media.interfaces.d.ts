@@ -41,7 +41,7 @@ export interface MediaImageData extends QuillMediaBaseConfig {
 }
 
 export declare type QuillMediaToolbarConfig = QuillToolbarConfig & {
-    upload?: string[] | string;
+    upload?: boolean | string[];
 }
 
 export interface QuillMediaModules extends QuillModules {
@@ -55,17 +55,17 @@ export interface QuillMediaModules extends QuillModules {
 }
 
 export interface QuillMediaMimeTypes {
-    image?: string[] | string,
-    audio?: string[] | string,
-    video?: string[] | string,
-    pdf?: string[] | string,
-    word?: string[] | string,
-    excel?: string[] | string,
-    powerpoint?: string[] | string,
+    image?: string | string[],
+    audio?: string | string[],
+    video?: string | string[],
+    pdf?: string | string[],
+    word?: string | string[],
+    excel?: string | string[],
+    powerpoint?: string | string[]
 }
 
 export interface QuillMimeTypes extends QuillMediaMimeTypes {
-    [key: string]: string[] | string | QuillMediaMimeTypes;
+    [key: string]: string | string[] | QuillMediaMimeTypes;
 }
 
 export interface ImageDimension {

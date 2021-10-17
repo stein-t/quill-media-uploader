@@ -49,6 +49,7 @@ class MediaUploader {
         protected quill: Quill,
         protected options: QuillMediaConfig
     ) {
+        this.options.mimetypes = Object.assign(MediaUploader.DEFAULTS.mimetypes, this.options.mimetypes);
         this.options = Object.assign(MediaUploader.DEFAULTS, this.options);
         this.toolbar = this.quill.getModule("toolbar");
         this.layout();
@@ -70,7 +71,7 @@ class MediaUploader {
         }
     }
 
-    uploadMedia(value: string, iconClass?: string) {
+    uploadMedia(value?: boolean | string, iconClass?: string) {
         if (!value) { return; }
         let fileInput = this.toolbar.container.querySelector("input.ql-mediauploader[type=file]");
         if (fileInput == null) {
@@ -149,10 +150,13 @@ class MediaUploader {
         this.uploadingStateSubject.next(value);
     }
 
-    private getMimetypes(value: string): string[] {
-        let mimetypes = this.options.mimetypes[value];
+    private getMimetypes(value?: boolean | string): string[] {
+        if (!value) { return []; }
+        let mimetypes = typeof(value) === "string" ? this.options.mimetypes[value] : this.options.mimetypes;
         if (!(Array.isArray(mimetypes) || typeof mimetypes === "string")) {
-            mimetypes = Object.entries(mimetypes).reduce((newObj, [key, val]) => newObj.concat(val), []);
+            mimetypes = Object.entries(mimetypes).reduce((newObj, [key, val]) => {
+                return (Array.isArray(val) || typeof val === "string") ? newObj.concat(val) : newObj;
+            }, []);
         }
         return Array.isArray(mimetypes) ? mimetypes : [mimetypes];
     }

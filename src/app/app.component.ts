@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
                     // ["link", "image", { upload: ["image", "audio", "video", "pdf", "word", "excel", "powerpoint"] }],
                     ["link", "image", { upload: ["image", "audio", "video", "file"] }],
+                    // ["link", "image", "upload"],
 
                     [{ size: ["small", false, "large", "huge"] }],  // custom dropdown
                     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     ["clean"]                                    // remove formatting button
                 ],
                 handlers: {
-                    upload: (value: string) => {
+                    upload: (value: any) => {
                         quill.getModule("mediaUploader").uploadMedia(value);
                     }
                 }
@@ -55,6 +56,9 @@ export class AppComponent implements OnInit, AfterViewInit {
             mediaUploader: {
                 upload: (file: File) => {
                     return of("https://www.google.de").pipe(delay(Math.floor(Math.random() * (10000 - 500 + 1) + 500)));
+                },
+                mimetypes: {
+                    audio: "audio/mpeg"
                 }
             }
         };

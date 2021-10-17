@@ -2,20 +2,23 @@
     QuillEditor UploadTool DropDownMenu
 /* ========================================================================== */
 
-.ql-snow .ql-picker.ql-upload > .ql-picker-label > svg {
+.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label > svg,
+.ql-toolbar.ql-snow button.ql-upload svg {
     display: none;
 }
 
-.ql-snow .ql-picker.ql-upload > .ql-picker-label {
+.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label,
+.ql-toolbar.ql-snow button.ql-upload {
     padding: 0 5px;
 }
 
-.ql-snow .ql-picker.ql-upload.ql-expanded > .ql-picker-label {
+.ql-toolbar.ql-snow .ql-picker.ql-upload.ql-expanded > .ql-picker-label {
     color: #888;
 }
 
-.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
-.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
+.ql-toolbar.ql-snow button.ql-upload::before,
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
     font-style: normal;
     font-variant: normal;
     text-rendering: auto;
@@ -23,10 +26,9 @@
     font-family: "Font Awesome 5 Free";
     font-size: 16px;
     font-weight: 900;
-    width: 20px;
 }
 
-.ql-snow .ql-picker.ql-upload .ql-picker-options {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options {
     font-size: 14px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -38,7 +40,7 @@
     margin: 2px 0 0;
 }
 
-.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item {
     cursor: pointer;
     display: block;
     color: #777;
@@ -48,58 +50,60 @@
     padding: 3px 20px;
 }
 
-.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item:hover {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item:hover {
     background-color: #e1e3e9;
     color: #333;
 }
 
-.ql-snow .ql-picker.ql-upload .ql-picker-item > span {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item > span {
     margin-left: 10px;
 }
 
-.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
     display: inline-block;
     line-height: 20px;
+    width: 20px;
 }
 
-.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
+.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
+.ql-toolbar.ql-snow button.ql-upload::before,
 .ql-snow .ql-picker.ql-upload .ql-picker-item::before {
     content: "\f0c6";
 }
 
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media"]::before,
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="image"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="image"]::before {
     content: "\f03e";
     font-weight: 400;
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="audio"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="audio"]::before {
     content: "\f028";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="video"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="video"]::before {
     content: "\f03d";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="file"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="file"]::before {
     content: "\f15b";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="pdf"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="pdf"]::before {
     content: "\f1c1";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="word"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="word"]::before {
     content: "\f1c2";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="excel"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="excel"]::before {
     content: "\f1c3";
 }
-.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="powerpoint"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="powerpoint"]::before {
     content: "\f1c4";
 }
 
-.ql-snow > .ql-editor .fa,
-.ql-snow > .ql-editor .fas,
-.ql-snow > .ql-editor .far,
-.ql-snow > .ql-editor .fal,
-.ql-snow > .ql-editor .fad,
-.ql-snow > .ql-editor .fab {
+.ql-toolbar.ql-snow > .ql-editor .fa,
+.ql-toolbar.ql-snow > .ql-editor .fas,
+.ql-toolbar.ql-snow > .ql-editor .far,
+.ql-toolbar.ql-snow > .ql-editor .fal,
+.ql-toolbar.ql-snow > .ql-editor .fad,
+.ql-toolbar.ql-snow > .ql-editor .fab {
     max-width: 100%;
 }
 
