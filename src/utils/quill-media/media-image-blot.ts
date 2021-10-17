@@ -19,7 +19,7 @@ class MediaImageBlot extends Embed {
         link.setAttribute("title", data.name);
         link.setAttribute("data-type", data.type);
 
-        const span = document.createElement("span");
+        const div = document.createElement("div");
         const image = document.createElement("img");
         image.setAttribute("alt", data.name);
         if (typeof data.src === "string") {
@@ -32,8 +32,8 @@ class MediaImageBlot extends Embed {
             image.style.minWidth = data.thumbnail.minWidth;
             image.style.minHeight = data.thumbnail.minHeight;
         }
-        span.appendChild(image);
-        link.appendChild(span);
+        div.appendChild(image);
+        link.appendChild(div);
 
         if (!!data.value) {
             if (typeof data.value === "string") {

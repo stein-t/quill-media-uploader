@@ -5,7 +5,7 @@ import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
 import MediaIconBlot from "./media-icon-blot";
 import MediaImageBlot from "./media-image-blot";
-import { ImageDimension, MediaIconData, MediaImageData, QuillMediaConfig } from "./quill-media.interfaces";
+import { MediaIconData, MediaImageData, QuillMediaConfig } from "./quill-media.interfaces";
 import * as $ from "jquery";
 
 class MediaUploader {
@@ -187,6 +187,11 @@ class MediaUploader {
     }
 
     private layout() {
+        const uploadItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-upload .ql-picker-label");
+        const title = this.options.translate ? this.options.translate("upload") : "Upload";
+        uploadItems.forEach(item => {
+            item.setAttribute("title", title);
+        });
         const uploadPickerItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-upload .ql-picker-item");
         uploadPickerItems.forEach(item => {
             const label = document.createElement("span");
@@ -203,6 +208,9 @@ MediaUploader.DEFAULTS = {
         maxHeight: "60px",
         minWidth: "10px",
         minHeight: "10px"
+    },
+    translate: value => {
+        return value[0].toUpperCase() + value.slice(1);     // capitalize first letter
     },
     mimetypes: {
         image: ["image/*"],

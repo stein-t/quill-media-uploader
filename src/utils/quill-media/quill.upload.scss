@@ -21,12 +21,12 @@
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     font-family: "Font Awesome 5 Free";
-    font-size: 1.2em;
+    font-size: 16px;
     font-weight: 900;
+    width: 20px;
 }
 
 .ql-snow .ql-picker.ql-upload .ql-picker-options {
-    z-index: 1000;
     font-size: 14px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -34,7 +34,7 @@
     border-radius: 4px;
     box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
     min-width: 150px;
-    padding: 5px 0;
+    padding: 0;
     margin: 2px 0 0;
 }
 
@@ -51,10 +51,6 @@
 .ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item:hover {
     background-color: #e1e3e9;
     color: #333;
-  }
-
-.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
-    font-size: 1em;
 }
 
 .ql-snow .ql-picker.ql-upload .ql-picker-item > span {
@@ -73,13 +69,14 @@
 
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media"]::before,
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="image"]::before {
-    content: "\f1c5";
+    content: "\f03e";
+    font-weight: 400;
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="audio"]::before {
-    content: "\f1c7";
+    content: "\f028";
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="video"]::before {
-    content: "\f1c8";
+    content: "\f03d";
 }
 .ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="file"]::before {
     content: "\f15b";
@@ -117,33 +114,17 @@ input.ql-mediauploader[type=file],
 
 span.ql-media-root,
 .ql-snow .ql-editor span.ql-media-root {
-    position: relative;
-}
-
-span.ql-media-root.ql-media-icon,
-.ql-snow .ql-editor span.ql-media-root.ql-media-icon {
     font-size: 0.8em;
     line-height: 1.1;
-    display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-    width: 5em;
-    position: relative;
 }
 
-span.ql-media-root.ql-media-icon > span,
-.ql-snow .ql-editor span.ql-media-root.ql-media-icon > span {
-    float: left;
-    width: 100%;
-}
-
-.ql-media-root.ql-active:hover,
-.ql-snow .ql-editor .ql-media-root.ql-active:hover {
+a.ql-active > div:hover,
+.ql-snow .ql-editor a.ql-active > div:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.ql-media-root:not(.ql-active),
-.ql-snow .ql-editor .ql-media-root:not(.ql-active) {
+.ql-media-root a:not(.ql-active),
+.ql-snow .ql-editor .ql-media-root a:not(.ql-active) {
     cursor: default;
 }
 
@@ -152,39 +133,51 @@ a.ql-media,
     text-decoration: none;
 }
 
-span.ql-media-root a > i {
-    display: block;
-    padding-top: 0.2em;
+span.ql-media-root a > div {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0.5px;
+}
+
+span.ql-media-root.ql-media-icon a > div {
+    width: 5em;
+    padding: 0.4em 0 0.2em 0;
+}
+
+span.ql-media-root a i {
     color: #3c8dbc;
 }
 
-span.ql-media-root a[data-type="audio"] > i {
+span.ql-media-root a[data-type="audio"] i {
     color: #f7a600;
 }
-span.ql-media-root a[data-type="video"] > i {
+span.ql-media-root a[data-type="video"] i {
     color: #527182;
 }
-span.ql-media-root a[data-type="pdf"] > i {
+span.ql-media-root a[data-type="pdf"] i {
     color: #ff0000;
 }
-span.ql-media-root a[data-type="word"] > i {
+span.ql-media-root a[data-type="word"] i {
     color: #2b579a;
 }
-span.ql-media-root a[data-type="excel"] > i {
+span.ql-media-root a[data-type="excel"] i {
     color: #217346;
 }
-span.ql-media-root a[data-type="powerpoint"] > i {
+span.ql-media-root a[data-type="powerpoint"] i {
     color: #d24726;
 }
 
-span.ql-media-root.ql-media-icon a.ql-media > span.caption {
+span.ql-media-root.ql-media-icon a.ql-media span.caption {
     font-size: 1.1em;
-    display: block;
+    display: inline-block;
     color: black;
-    margin: 0 0.3em;
-    padding: 0.3em 0;
+    opacity: 0.8;
+    padding-top: 0.3em;
     white-space: nowrap;
     overflow: hidden;
+    width: 4em;
 }
 
 .ql-media-root.uploading > span {
@@ -192,15 +185,11 @@ span.ql-media-root.ql-media-icon a.ql-media > span.caption {
     opacity: 0.5;
 }
 
-.ql-media-root.uploading::before {
+.ql-media-root.uploading a > div::before {
     content: "";
     position: absolute;
-    top: 47%;
+    top: 50%;
     left: 50%;
-    width: 2.8em;
-    height: 2.8em;
-    margin-top: -1.4em;
-    margin-left: -1.4em;
     border-radius: 50%;
     border: 0.3em solid #ccc;
     border-top-color: #1e986c;
@@ -209,41 +198,43 @@ span.ql-media-root.ql-media-icon a.ql-media > span.caption {
     -webkit-animation: spinner 0.6s linear infinite;
     animation: spinner 0.6s linear infinite;
 }
+.ql-media-root.ql-media-icon.uploading a > div::before {
+    width: 2.8em;
+    height: 2.8em;
+    margin-top: -1.7em;
+    margin-left: -1.4em;
+}
+.ql-media-root.ql-media-image.uploading a > div::before {
+    width: 28px;
+    height: 28px;
+    margin-top: -14px;
+    margin-left: -14px;
+    border-width: 3px;
+}
 @keyframes spinner {
     to {
       transform: rotate(360deg);
     }
 }
 
-.ql-media-root.ql-media-icon.error::before {
+.ql-media-root.error a > div::after {
     content: "\f06a";
     color: 	#bb2124;
     font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    cursor: default;
+    z-index: 1;
+}
+.ql-media-root.ql-media-icon.error a > div::after {
     font-size: 2em;
-    font-weight: 900;
-    position: absolute;
-    top: 0.2em;
-    left: 0.1em;
-    cursor: default;
-    z-index: 1;
+    top: 0.05em;
+    left: 0.05em;
 }
-
-.ql-media-root.ql-media-image a > span {
-    display: inline-block;
-    position: relative;
-}
-
-.ql-media-root.ql-media-image.error a > span::before {
-    content: "\f06a";
-    color: 	#bb2124;
-    font-family: "Font Awesome 5 Free";
-    font-size: 26px;
-    font-weight: 900;
-    position: absolute;
+.ql-media-root.ql-media-image.error a > div::after {
+    font-size: 20px;
     top: -5px;
-    right: 0;
-    cursor: default;
-    z-index: 1;
+    right: -3px;
 }
 
 // div.ql-media.drag {

@@ -19,14 +19,16 @@ class MediaIconBlot extends Embed {
         link.setAttribute("title", data.name);
         link.setAttribute("data-type", data.type);
 
+        const div = document.createElement("div");
         const icon = document.createElement("i");
         icon.className = !!data.iconClass ? `${data.iconClass} ${data.iconSize}` : `fas fa-file-${data.type} ${data.iconSize}`;
         icon.setAttribute("data-size", data.iconSize);
         const caption = document.createElement("span");
         caption.className = "caption";
         caption.textContent = data.name;
-        link.appendChild(icon);
-        link.appendChild(caption);
+        div.appendChild(icon);
+        div.appendChild(caption);
+        link.appendChild(div);
 
         if (!!data.value) {
             if (typeof data.value === "string") {
@@ -48,10 +50,10 @@ class MediaIconBlot extends Embed {
 
     static value(domNode: Element): MediaIconData {
         const link = domNode.firstElementChild.firstElementChild;
-        const icon = link?.firstElementChild;
+        const icon = link.firstElementChild.firstElementChild;
         const data: MediaIconData = {
-            name: link?.getAttribute("title"),
-            type: link?.getAttribute("data-type"),
+            name: link.getAttribute("title"),
+            type: link.getAttribute("data-type"),
             value: this.clickValue(link),
             iconSize: icon.getAttribute("data-size")
         };
@@ -65,7 +67,7 @@ class MediaIconBlot extends Embed {
     }
 
     static clickValue(link: Element) {
-        return link?.getAttribute("href") ?? JSON.parse(link?.getAttribute("data-value"));
+        return link.getAttribute("href") ?? JSON.parse(link.getAttribute("data-value"));
     }
 
     static match(url) {
@@ -119,7 +121,7 @@ class MediaIconBlot extends Embed {
                     })
                 )
                 .subscribe(result => {
-                    const link = this.domNode?.firstElementChild.firstElementChild;
+                    const link = this.domNode.firstElementChild.firstElementChild;
                     if (typeof result === "string") {
                         MediaIconBlot.prepareHref(link, result);
                     } else {
