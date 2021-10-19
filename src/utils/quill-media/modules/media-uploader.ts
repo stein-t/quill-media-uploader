@@ -6,7 +6,7 @@ const Embed = Quill.import("blots/embed");
 import MediaIcon from "../formats/media-icon";
 import MediaImage from "../formats/media-image";
 import { MediaIconData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "../quill-media.interfaces";
-import * as $ from "jquery";
+import MediaBase from "../formats/media-base";
 
 class MediaUploader {
     static DEFAULTS: QuillMediaConfig;
@@ -35,16 +35,16 @@ class MediaUploader {
     }
 
     static handleClick(
-        event: JQuery.ClickEvent<HTMLElement, undefined, any, any>,
-        clickHandler: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, type: string, name: string, value: any) => any
+        event: any,
+        clickHandler: (type: string, name: string, value: any, event: any) => any
     ): any {
         event.preventDefault();
-        const link = $(event.target).closest("a.ql-media-link");
-        const root = $(link[0]).closest("a.ql-media");
-        const value = MediaIcon.clickValue(link[0]);
-        const filename = link[0].getAttribute("title");
-        const type = root[0].getAttribute("data-type");
-        return clickHandler(event, type, filename, value);
+        const link = event.target.closest("a.ql-media-link");
+        const root = link.closest("span.ql-media");
+        const value = MediaBase.clickValue(link);
+        const filename = link.getAttribute("title");
+        const type = root.getAttribute("data-type");
+        return clickHandler(type, filename, value, event);
     }
 
     constructor(
@@ -56,9 +56,7 @@ class MediaUploader {
         this.toolbar = this.quill.getModule("toolbar");
         this.layout();
         if (this.options.clickHandler) {
-            $(quill.root).on(
-              "click", "a.ql-media.ql-active",
-              event => MediaUploader.handleClick(event, this.options.clickHandler));
+            quill.root.addEventListener("click", this.delegateHandler("a.ql-media-link.ql-media-active", this.options.clickHandler));
         }
     }
 
@@ -69,7 +67,7 @@ class MediaUploader {
         }
         this.disposeSubject.next(true);
         if (this.options.clickHandler) {
-            $(this.quill.root).off("click", "a.ql-media.ql-active");
+            this.quill.root.removeEventListener("click", this.delegateHandler("a.ql-media-link.ql-media-active", this.options.clickHandler));
         }
     }
 
@@ -211,6 +209,18 @@ class MediaUploader {
             label.textContent = this.options.translate ? this.options.translate(item.dataset.value) : item.dataset.value;
             item.appendChild(label);
         });
+    }
+
+    /** taken from https://stackoverflow.com/a/46101063 */
+    private delegateHandler(selector: string, handler: (type: string, name: string, value: any, event: PointerEvent) => void) {
+        return (event: PointerEvent) => {
+            let target = event.target as HTMLElement;
+            do {
+                if (target.matches(selector)) {
+                    MediaUploader.handleClick.call(target, event, handler);
+                }
+            } while (target !== event.currentTarget && (target = target.parentNode as HTMLElement));
+        };
     }
 }
 

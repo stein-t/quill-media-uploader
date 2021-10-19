@@ -13,7 +13,7 @@ export interface QuillMediaConfig extends QuillMediaBaseConfig {
     thumbnail?: ImageDimension;
     mimetypes?: QuillMimeTypes;
     translate?: (key: string) => string;
-    clickHandler?: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, type: string, name: string, value: any) => any;
+    clickHandler?: (type: string, name: string, value: any, event: any) => void;
 }
 
 export interface MediaData extends QuillMediaBaseConfig {

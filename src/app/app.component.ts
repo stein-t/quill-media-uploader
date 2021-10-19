@@ -60,7 +60,10 @@ export class AppComponent implements OnInit, AfterViewInit {
             mediaUploader: {
                 upload: (type: string, file: File) => {
                     return of("https://www.google.de").pipe(delay(Math.floor(Math.random() * (10000 - 500 + 1) + 500)));
-                }
+                },
+                // clickHandler: (type: string, name: string, value: any, event: any) => {
+                //     console.log(`Click Handler Test - Type: ${type}, Name: ${name}, Value: ${value}`, event);
+                // }
             }
         };
         this.quill = new Quill("#editor", {
