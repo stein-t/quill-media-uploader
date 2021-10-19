@@ -3,9 +3,9 @@ import Quill, { RangeStatic } from "quill";
 const Delta = Quill.import("delta");
 import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
-import MediaIconBlot from "./media-icon-blot";
-import MediaImageBlot from "./media-image-blot";
-import { MediaIconData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "./quill-media.interfaces";
+import MediaIcon from "../formats/media-icon";
+import MediaImage from "../formats/media-image";
+import { MediaIconData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "../quill-media.interfaces";
 import * as $ from "jquery";
 
 class MediaUploader {
@@ -25,8 +25,8 @@ class MediaUploader {
     private uploadingStateSubscription: Subscription;
 
     static register() {
-        Quill.register("formats/mediaicon", MediaIconBlot);
-        Quill.register("formats/mediaimage", MediaImageBlot);
+        Quill.register("formats/mediaicon", MediaIcon);
+        Quill.register("formats/mediaimage", MediaImage);
     }
 
     static sanitize(ret: string) {
@@ -41,7 +41,7 @@ class MediaUploader {
         event.preventDefault();
         const link = $(event.target).closest("a.ql-media-link");
         const root = $(link[0]).closest("a.ql-media");
-        const value = MediaIconBlot.clickValue(link[0]);
+        const value = MediaIcon.clickValue(link[0]);
         const filename = link[0].getAttribute("title");
         const type = root[0].getAttribute("data-type");
         return clickHandler(event, type, filename, value);

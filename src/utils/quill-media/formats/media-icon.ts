@@ -3,41 +3,39 @@ const Embed = Quill.import("blots/embed");
 import { sanitize } from "quill/formats/link";
 import { Subscription } from "rxjs";
 import { catchError, finalize, take } from "rxjs/operators";
-import { ImageDimension, MediaData, MediaIconData, MediaImageData } from "./quill-media.interfaces";
+import { MediaData, MediaIconData } from "../quill-media.interfaces";
 
-class MediaImageBlot extends Embed {
+class MediaIcon extends Embed {
     private uploadSubscription: Subscription;
     private cancelUploadingSubscription: Subscription;
 
-    static create(data: MediaImageData) {
+    static create(data: MediaIconData) {
         const node = super.create(data);
-        node.classList.add("ql-media-image");
+        node.classList.add("ql-media-icon");
         if (!data) { return node; }
         node.setAttribute("data-type", data.type);
         const link = document.createElement("a");
-        link.classList.add("ql-media-link");
+        link.className = "ql-media-link";
         link.setAttribute("title", data.name);
 
         const div = document.createElement("div");
         div.className = "ql-media-container";
-        const image = document.createElement("img");
-        image.setAttribute("alt", data.name);
-        if (typeof data.src === "string") {
-            image.setAttribute("src", this.sanitize(data.src));
+        const icon = document.createElement("i");
+        icon.className = !!data.iconClass ? `${data.iconClass} ${data.iconSize}` : `fas fa-file-${data.type} ${data.iconSize}`;
+        icon.setAttribute("data-size", data.iconSize);
+        if (data.iconClass) {
+            icon.setAttribute("data-icon", data.iconClass);
         }
-        if (data.thumbnail) {
-            image.classList.add("ql-media-thumbnail");
-            image.style.maxWidth = data.thumbnail.maxWidth + "px";
-            image.style.maxHeight = data.thumbnail.maxHeight + "px";
-            image.style.minWidth = data.thumbnail.minWidth + "px";
-            image.style.minHeight = data.thumbnail.minHeight + "px";
-        }
-        div.appendChild(image);
+        const caption = document.createElement("span");
+        caption.className = "caption";
+        caption.textContent = data.name;
+        div.appendChild(icon);
+        div.appendChild(caption);
         link.appendChild(div);
 
         if (data.value) {
             if (typeof data.value === "string") {
-                MediaImageBlot.prepareHref(link, data.value);
+                MediaIcon.prepareHref(link, data.value);
             } else {
                 link.setAttribute("data-value", JSON.stringify(data.value));
             }
@@ -51,7 +49,7 @@ class MediaImageBlot extends Embed {
         return node;
     }
 
-    static value(domNode: Element): MediaImageData {
+    static value(domNode: Element): MediaIconData {
         const link = domNode.firstElementChild.firstElementChild;
         const data: MediaData = {
             type: domNode.getAttribute("data-type"),
@@ -59,18 +57,13 @@ class MediaImageBlot extends Embed {
             value: this.clickValue(link)
         };
 
-        const image = link.firstElementChild.firstElementChild as HTMLElement;
-        const thumbnail: ImageDimension = { };
-        if (image.style.maxWidth) { thumbnail.maxWidth = parseInt(image.style.maxWidth, 10); }
-        if (image.style.maxHeight) { thumbnail.maxHeight = parseInt(image.style.maxHeight, 10); }
-        if (image.style.minWidth) { thumbnail.minWidth = parseInt(image.style.minWidth, 10); }
-        if (image.style.minHeight) { thumbnail.minHeight = parseInt(image.style.minHeight, 10); }
-        const imageData = {
-            src: image.getAttribute("src"),
-            thumbnail
+        const icon = link.firstElementChild.firstElementChild;
+        const iconData = {
+            iconSize: icon.getAttribute("data-size"),
+            iconClass: icon.getAttribute("data-icon")
         };
 
-        return { ...data, ...imageData };
+        return { ...data, ...iconData };
     }
 
     private static prepareHref(link: Element, value: string) {
@@ -84,10 +77,10 @@ class MediaImageBlot extends Embed {
     }
 
     static sanitize(url) {
-        return sanitize(url, ["http", "https", "data"]) ? url : "//:0";
+        return sanitize(url, ["http", "https"]) ? url : "//:0";
     }
 
-    constructor(private domNode: Element, private data: MediaImageData) {
+    constructor(private domNode: Element, private data: MediaIconData) {
         super(domNode);
         // if (this.data.history) { this.data.history.ignoreChange = true; }
         this.upload();
@@ -132,7 +125,7 @@ class MediaImageBlot extends Embed {
                 .subscribe(result => {
                     const link = this.domNode.firstElementChild.firstElementChild;
                     if (typeof result === "string") {
-                        MediaImageBlot.prepareHref(link, result);
+                        MediaIcon.prepareHref(link, result);
                     } else {
                         link.setAttribute("data-value", JSON.stringify(result));
                     }
@@ -160,8 +153,8 @@ class MediaImageBlot extends Embed {
         }
     }
 }
-MediaImageBlot.blotName = "mediaimage";
-MediaImageBlot.tagName = "span";
-MediaImageBlot.className = "ql-media";
+MediaIcon.blotName = "mediaicon";
+MediaIcon.tagName = "span";
+MediaIcon.className = "ql-media";
 
-export default MediaImageBlot;
+export default MediaIcon;

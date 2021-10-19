@@ -1,3 +1,11 @@
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+.ql-upload *, .ql-media *,
+.ql-upload *::before, .ql-media *::before,
+.ql-upload *::after, .ql-media *::after {
+  box-sizing: border-box;
+}
+
 /* ==========================================================================
     QuillEditor UploadTool DropDownMenu
 /* ========================================================================== */

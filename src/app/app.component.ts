@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit } from "@angular/core";
 import Quill from "quill";
 import { of } from "rxjs";
 import { delay } from "rxjs/operators";
-import MediaUploader from "src/utils/quill-media/media-uploader";
+import MediaUploader from "src/utils/quill-media/modules/media-uploader";
 import { QuillMediaModules } from "src/utils/quill-media/quill-media.interfaces";
 
 @Component({
