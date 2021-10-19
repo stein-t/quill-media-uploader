@@ -87,7 +87,7 @@ class MediaImageBlot extends Embed {
         return sanitize(url, ["http", "https", "data"]) ? url : "//:0";
     }
 
-    constructor(private domNode: Element, private data: MediaIconData) {
+    constructor(private domNode: Element, private data: MediaImageData) {
         super(domNode);
         // if (this.data.history) { this.data.history.ignoreChange = true; }
         this.upload();
@@ -114,7 +114,7 @@ class MediaImageBlot extends Embed {
                 });
             this.domNode.classList.add("ql-media-uploading");
             this.data.$uploadingState.next(true);
-            this.uploadSubscription = this.data.upload(this.data.type, this.data.file)
+            this.uploadSubscription = this.data.upload(this.data.type, this.data.file, this.data.thumbnail)
                 .pipe(
                     finalize(() => this.reset()),
                     catchError(err => {

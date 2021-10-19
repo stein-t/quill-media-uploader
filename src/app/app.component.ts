@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit } from "@angular/core";
 import Quill from "quill";
 import { of } from "rxjs";
 import { delay } from "rxjs/operators";
+import MediaUploader from "src/utils/quill-media/media-uploader";
 import { QuillMediaModules } from "src/utils/quill-media/quill-media.interfaces";
 
 @Component({
@@ -12,6 +13,9 @@ import { QuillMediaModules } from "src/utils/quill-media/quill-media.interfaces"
 })
 export class AppComponent implements OnInit, AfterViewInit {
     title = "TestAngularQuill";
+
+    private quill: Quill;
+    private uploader: MediaUploader;
 
     constructor(
         private elem: ElementRef,
@@ -49,23 +53,21 @@ export class AppComponent implements OnInit, AfterViewInit {
                 ],
                 handlers: {
                     upload: (value: any) => {
-                        quill.getModule("mediaUploader").uploadMedia(value);
+                        this.uploader.uploadMedia(value);
                     }
                 }
             },
             mediaUploader: {
                 upload: (type: string, file: File) => {
                     return of("https://www.google.de").pipe(delay(Math.floor(Math.random() * (10000 - 500 + 1) + 500)));
-                },
-                mimetypes: {
-                    audio: "audio/mpeg"
                 }
             }
         };
-        const quill = new Quill("#editor", {
+        this.quill = new Quill("#editor", {
             theme: "snow",
             modules
         });
+        this.uploader = this.quill.getModule("mediaUploader");
     }
 }
 
