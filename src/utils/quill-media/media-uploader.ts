@@ -217,10 +217,10 @@ class MediaUploader {
 MediaUploader.DEFAULTS = {
     iconSize: "fa-3x",
     thumbnail: {
-        maxWidth: "180px",
-        maxHeight: "60px",
-        minWidth: "10px",
-        minHeight: "10px"
+        maxWidth: 180,
+        maxHeight: 60,
+        minWidth: 10,
+        minHeight: 10
     },
     translate: value => {
         return value[0].toUpperCase() + value.slice(1);     // capitalize first letter

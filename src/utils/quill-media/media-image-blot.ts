@@ -27,10 +27,10 @@ class MediaImageBlot extends Embed {
         }
         if (data.thumbnail) {
             image.classList.add("ql-media-thumbnail");
-            image.style.maxWidth = data.thumbnail.maxWidth;
-            image.style.maxHeight = data.thumbnail.maxHeight;
-            image.style.minWidth = data.thumbnail.minWidth;
-            image.style.minHeight = data.thumbnail.minHeight;
+            image.style.maxWidth = data.thumbnail.maxWidth + "px";
+            image.style.maxHeight = data.thumbnail.maxHeight + "px";
+            image.style.minWidth = data.thumbnail.minWidth + "px";
+            image.style.minHeight = data.thumbnail.minHeight + "px";
         }
         div.appendChild(image);
         link.appendChild(div);
@@ -61,10 +61,10 @@ class MediaImageBlot extends Embed {
 
         const image = link.firstElementChild.firstElementChild as HTMLElement;
         const thumbnail: ImageDimension = { };
-        if (image.style.maxWidth) { thumbnail.maxWidth = image.style.maxWidth; }
-        if (image.style.maxHeight) { thumbnail.maxHeight = image.style.maxHeight; }
-        if (image.style.minWidth) { thumbnail.minWidth = image.style.minWidth; }
-        if (image.style.minHeight) { thumbnail.minHeight = image.style.minHeight; }
+        if (image.style.maxWidth) { thumbnail.maxWidth = parseInt(image.style.maxWidth, 10); }
+        if (image.style.maxHeight) { thumbnail.maxHeight = parseInt(image.style.maxHeight, 10); }
+        if (image.style.minWidth) { thumbnail.minWidth = parseInt(image.style.minWidth, 10); }
+        if (image.style.minHeight) { thumbnail.minHeight = parseInt(image.style.minHeight, 10); }
         const imageData = {
             src: image.getAttribute("src"),
             thumbnail
@@ -114,7 +114,7 @@ class MediaImageBlot extends Embed {
                 });
             this.domNode.classList.add("ql-media-uploading");
             this.data.$uploadingState.next(true);
-            this.uploadSubscription = this.data.upload(this.data.type, this.data.file, this.data.thumbnail)
+            this.uploadSubscription = this.data.upload(this.data.type, this.data.file)
                 .pipe(
                     finalize(() => this.reset()),
                     catchError(err => {

@@ -2,7 +2,7 @@ import { QuillModules, QuillToolbarConfig } from "ngx-quill";
 import { Observable, Subject } from "rxjs";
 
 export interface QuillMediaBaseConfig {
-    upload?: (type: string, file: File, thumbnailDimension?: ImageDimension) => Observable<any>;
+    upload?: (type: string, file: File) => Observable<any>;
     uploadSuccess?: (type: string, file: string, value: any) => void;
     uploadError?: (type: string, file: string, err: any) => void;
     uploadCancelled?: (type: string, file: string) => void;
@@ -65,8 +65,8 @@ export interface QuillMimeTypes extends QuillMediaMimeTypes {
 }
 
 export interface ImageDimension {
-    maxWidth?: string;
-    maxHeight?: string;
-    minWidth?: string;
-    minHeight?: string;
+    maxWidth?: number;
+    maxHeight?: number;
+    minWidth?: number;
+    minHeight?: number;
 }
