@@ -36,13 +36,15 @@ class MediaUploader {
 
     static handleClick(
         event: JQuery.ClickEvent<HTMLElement, undefined, any, any>,
-        clickHandler: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, file: string, value: any) => any
+        clickHandler: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, type: string, name: string, value: any) => any
     ): any {
         event.preventDefault();
-        const link = $(event.target).closest("a.ql-media");
+        const link = $(event.target).closest("a.ql-media-link");
+        const root = $(link[0]).closest("a.ql-media");
         const value = MediaIconBlot.clickValue(link[0]);
-        const file = link.attr("title");
-        return clickHandler(event, file, value);
+        const filename = link[0].getAttribute("title");
+        const type = root[0].getAttribute("data-type");
+        return clickHandler(event, type, filename, value);
     }
 
     constructor(

@@ -3,7 +3,7 @@ const Embed = Quill.import("blots/embed");
 import { sanitize } from "quill/formats/link";
 import { Subscription } from "rxjs";
 import { catchError, finalize, take } from "rxjs/operators";
-import { MediaIconData } from "./quill-media.interfaces";
+import { MediaData, MediaIconData } from "./quill-media.interfaces";
 
 class MediaIconBlot extends Embed {
     private uploadSubscription: Subscription;
@@ -13,16 +13,19 @@ class MediaIconBlot extends Embed {
         const node = super.create(data);
         node.classList.add("ql-media-icon");
         if (!data) { return node; }
-
+        node.setAttribute("data-type", data.type);
         const link = document.createElement("a");
-        link.classList.add("ql-media");
+        link.className = "ql-media-link";
         link.setAttribute("title", data.name);
-        link.setAttribute("data-type", data.type);
 
         const div = document.createElement("div");
+        div.className = "ql-media-container";
         const icon = document.createElement("i");
         icon.className = !!data.iconClass ? `${data.iconClass} ${data.iconSize}` : `fas fa-file-${data.type} ${data.iconSize}`;
         icon.setAttribute("data-size", data.iconSize);
+        if (data.iconClass) {
+            icon.setAttribute("data-icon", data.iconClass);
+        }
         const caption = document.createElement("span");
         caption.className = "caption";
         caption.textContent = data.name;
@@ -30,34 +33,37 @@ class MediaIconBlot extends Embed {
         div.appendChild(caption);
         link.appendChild(div);
 
-        if (!!data.value) {
+        if (data.value) {
             if (typeof data.value === "string") {
                 MediaIconBlot.prepareHref(link, data.value);
             } else {
                 link.setAttribute("data-value", JSON.stringify(data.value));
             }
-            link.classList.add("ql-active");
-            node.classList.add("ql-active");
+            link.classList.add("ql-media-active");
         } else if (data.file && data.upload) {
-            node.classList.add("uploading");
+            node.classList.add("ql-media-uploading");
         } else {
-            node.classList.add("error");
+            node.classList.add("ql-media-error");
         }
-
         node.appendChild(link);
         return node;
     }
 
     static value(domNode: Element): MediaIconData {
         const link = domNode.firstElementChild.firstElementChild;
-        const icon = link.firstElementChild.firstElementChild;
-        const data: MediaIconData = {
+        const data: MediaData = {
+            type: domNode.getAttribute("data-type"),
             name: link.getAttribute("title"),
-            type: link.getAttribute("data-type"),
-            value: this.clickValue(link),
-            iconSize: icon.getAttribute("data-size")
+            value: this.clickValue(link)
         };
-        return data;
+
+        const icon = link.firstElementChild.firstElementChild;
+        const iconData = {
+            iconSize: icon.getAttribute("data-size"),
+            iconClass: icon.getAttribute("data-icon")
+        };
+
+        return { ...data, ...iconData };
     }
 
     private static prepareHref(link: Element, value: string) {
@@ -70,10 +76,6 @@ class MediaIconBlot extends Embed {
         return link.getAttribute("href") ?? JSON.parse(link.getAttribute("data-value"));
     }
 
-    static match(url) {
-        return /\.(jpe?g|gif|png)$/.test(url);  // TODO
-    }
-
     static sanitize(url) {
         return sanitize(url, ["http", "https"]) ? url : "//:0";
     }
@@ -82,7 +84,7 @@ class MediaIconBlot extends Embed {
         super(domNode);
         // if (this.data.history) { this.data.history.ignoreChange = true; }
         this.upload();
-        if (!!data.$dispose) {
+        if (data.$dispose) {
             data.$dispose.pipe(take(1)).subscribe(() => this.reset());
         }
     }
@@ -90,7 +92,7 @@ class MediaIconBlot extends Embed {
     detach() {
         super.detach();
         if (this.uploadSubscription) {
-            this.data.uploadCancelled(this.data.name);
+            this.data.uploadCancelled(this.data.type, this.data.name);
         }
         this.reset();
     }
@@ -100,19 +102,19 @@ class MediaIconBlot extends Embed {
             this.cancelUploadingSubscription = this.data.$cancelUploading
                 .pipe(take(1))
                 .subscribe(() => {
-                    this.domNode.classList.add("error");
+                    this.domNode.classList.add("ql-media-error");
                     this.reset();
                 });
-            this.domNode.classList.add("uploading");
+            this.domNode.classList.add("ql-media-uploading");
             this.data.$uploadingState.next(true);
-            this.uploadSubscription = this.data.upload(this.data.file)
+            this.uploadSubscription = this.data.upload(this.data.type, this.data.file)
                 .pipe(
                     finalize(() => this.reset()),
                     catchError(err => {
-                        this.domNode.classList.add("error");
+                        this.domNode.classList.add("ql-media-error");
                         const message = `[MediaUploader] Failed to upload ${this.data.name}`;
                         if (this.data.uploadError) {
-                            this.data.uploadError(this.data.name, err);
+                            this.data.uploadError(this.data.type, this.data.name, err);
                         } else {
                             console.error(message, err);
                         }
@@ -127,11 +129,10 @@ class MediaIconBlot extends Embed {
                     } else {
                         link.setAttribute("data-value", JSON.stringify(result));
                     }
-                    link.classList.add("ql-active");
-                    this.domNode.classList.add("ql-active");
+                    link.classList.add("ql-media-active");
                     const message = `[MediaUploader] Successfully uploaded ${this.data.name}`;
                     if (this.data.uploadSuccess) {
-                        this.data.uploadSuccess(this.data.name, result);
+                        this.data.uploadSuccess(this.data.type, this.data.name, result);
                     } else {
                         // tslint:disable-next-line: no-console
                         console.info(message);
@@ -143,7 +144,7 @@ class MediaIconBlot extends Embed {
 
     private reset() {
         if (this.uploadSubscription) {
-            this.domNode.classList.remove("uploading");
+            this.domNode.classList.remove("ql-media-uploading");
             this.uploadSubscription.unsubscribe();
             this.cancelUploadingSubscription.unsubscribe();
             this.uploadSubscription = null;
@@ -154,6 +155,6 @@ class MediaIconBlot extends Embed {
 }
 MediaIconBlot.blotName = "mediaicon";
 MediaIconBlot.tagName = "span";
-MediaIconBlot.className = "ql-media-root";
+MediaIconBlot.className = "ql-media";
 
 export default MediaIconBlot;

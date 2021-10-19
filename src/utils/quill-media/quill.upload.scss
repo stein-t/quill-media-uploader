@@ -111,33 +111,25 @@
     QuillEditor Media Icon
    ========================================================================== */
 
-input.ql-mediauploader[type=file],
-.ql-snow .ql-editor input.ql-mediauploader[type=file] {
+input.ql-mediauploader[type=file] {
   display: none;
 }
 
-span.ql-media-root,
-.ql-snow .ql-editor span.ql-media-root {
+span.ql-media a.ql-media-link {
     font-size: 0.8em;
     line-height: 1.1;
-}
-
-a.ql-active > div:hover,
-.ql-snow .ql-editor a.ql-active > div:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.ql-media-root a:not(.ql-active),
-.ql-snow .ql-editor .ql-media-root a:not(.ql-active) {
-    cursor: default;
-}
-
-a.ql-media,
-.ql-snow .ql-editor a.ql-media {
     text-decoration: none;
 }
 
-span.ql-media-root a > div {
+span.ql-media a.ql-media-link.ql-media-active div.ql-media-container:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+span.ql-media a.ql-media-link:not(.ql-media-active) {
+    cursor: default;
+}
+
+span.ql-media div.ql-media-container {
     display: inline-block;
     position: relative;
     text-align: center;
@@ -145,35 +137,35 @@ span.ql-media-root a > div {
     margin: 0.5px;
 }
 
-span.ql-media-root.ql-media-icon a > div {
+span.ql-media.ql-media-icon div.ql-media-container {
     width: 5em;
     padding: 0.4em 0 0.2em 0;
 }
 
-span.ql-media-root a i {
+span.ql-media.ql-media-icon div.ql-media-container > i {
     color: #3c8dbc;
 }
 
-span.ql-media-root a[data-type="audio"] i {
+span.ql-media.ql-media-icon[data-type="audio"] div.ql-media-container > i {
     color: #f7a600;
 }
-span.ql-media-root a[data-type="video"] i {
+span.ql-media.ql-media-icon[data-type="video"] div.ql-media-container > i {
     color: #527182;
 }
-span.ql-media-root a[data-type="pdf"] i {
+span.ql-media.ql-media-icon[data-type="pdf"] div.ql-media-container > i {
     color: #ff0000;
 }
-span.ql-media-root a[data-type="word"] i {
+span.ql-media.ql-media-icon[data-type="word"] div.ql-media-container > i {
     color: #2b579a;
 }
-span.ql-media-root a[data-type="excel"] i {
+span.ql-media.ql-media-icon[data-type="excel"] div.ql-media-container > i {
     color: #217346;
 }
-span.ql-media-root a[data-type="powerpoint"] i {
+span.ql-media.ql-media-icon[data-type="powerpoint"] div.ql-media-container > i {
     color: #d24726;
 }
 
-span.ql-media-root.ql-media-icon a.ql-media span.caption {
+span.ql-media.ql-media-icon div.ql-media-container > span.caption {
     font-size: 1.1em;
     display: inline-block;
     color: black;
@@ -184,12 +176,12 @@ span.ql-media-root.ql-media-icon a.ql-media span.caption {
     width: 4em;
 }
 
-.ql-media-root.uploading a > div > *:not(span) {
+span.ql-media.ql-media-uploading div.ql-media-container > *:not(span) {
     filter: blur(0.5px);
     opacity: 0.5;
 }
 
-.ql-media-root.uploading a > div::before {
+span.ql-media.ql-media-uploading div.ql-media-container::before {
     content: "";
     position: absolute;
     top: 50%;
@@ -202,13 +194,13 @@ span.ql-media-root.ql-media-icon a.ql-media span.caption {
     -webkit-animation: spinner 0.6s linear infinite;
     animation: spinner 0.6s linear infinite;
 }
-.ql-media-root.ql-media-icon.uploading a > div::before {
+span.ql-media.ql-media-icon.ql-media-uploading div.ql-media-container::before {
     width: 2.8em;
     height: 2.8em;
     margin-top: -1.7em;
     margin-left: -1.4em;
 }
-.ql-media-root.ql-media-image.uploading a > div::before {
+span.ql-media.ql-media-image.ql-media-uploading div.ql-media-container::before {
     width: 28px;
     height: 28px;
     margin-top: -14px;
@@ -221,7 +213,7 @@ span.ql-media-root.ql-media-icon a.ql-media span.caption {
     }
 }
 
-.ql-media-root.error a > div::after {
+span.ql-media.ql-media-error div.ql-media-container::after {
     content: "\f06a";
     color: 	#bb2124;
     font-family: "Font Awesome 5 Free";
@@ -230,12 +222,14 @@ span.ql-media-root.ql-media-icon a.ql-media span.caption {
     cursor: default;
     z-index: 1;
 }
-.ql-media-root.ql-media-icon.error a > div::after {
+
+span.ql-media.ql-media-icon.ql-media-error div.ql-media-container::after {
     font-size: 2em;
     top: 0.05em;
     left: 0.05em;
 }
-.ql-media-root.ql-media-image.error a > div::after {
+
+span.ql-media.ql-media-image.ql-media-error div.ql-media-container::after {
     font-size: 20px;
     top: -5px;
     right: -3px;

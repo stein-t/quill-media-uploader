@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }
             },
             mediaUploader: {
-                upload: (file: File) => {
+                upload: (type: string, file: File) => {
                     return of("https://www.google.de").pipe(delay(Math.floor(Math.random() * (10000 - 500 + 1) + 500)));
                 },
                 mimetypes: {

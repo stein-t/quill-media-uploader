@@ -2,10 +2,10 @@ import { QuillModules, QuillToolbarConfig } from "ngx-quill";
 import { Observable, Subject } from "rxjs";
 
 export interface QuillMediaBaseConfig {
-    upload?: (file: File) => Observable<any>;
-    uploadSuccess?: (file: string, value: any) => void;
-    uploadError?: (file: string, err: any) => void;
-    uploadCancelled?: (file: string) => void;
+    upload?: (type: string, file: File) => Observable<any>;
+    uploadSuccess?: (type: string, file: string, value: any) => void;
+    uploadError?: (type: string, file: string, err: any) => void;
+    uploadCancelled?: (type: string, file: string) => void;
 }
 
 export interface QuillMediaConfig extends QuillMediaBaseConfig {
@@ -13,31 +13,27 @@ export interface QuillMediaConfig extends QuillMediaBaseConfig {
     thumbnail?: ImageDimension;
     mimetypes?: QuillMimeTypes;
     translate?: (key: string) => string;
-    clickHandler?: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, file: string, value: any) => any;
+    clickHandler?: (event: JQuery.ClickEvent<HTMLElement, undefined, any, any>, type: string, name: string, value: any) => any;
 }
 
-export interface MediaIconData extends QuillMediaBaseConfig {
+export interface MediaData extends QuillMediaBaseConfig {
     name: string;
     type: string;
-    iconSize?: string;
     value?: any;
     file?: File;
+    $cancelUploading?: Observable<boolean>;
+    $uploadingState?: Subject<boolean>;
+    $dispose?: Observable<boolean>;
+}
+
+export interface MediaIconData extends MediaData {
+    iconSize: string;
     iconClass?: string;
-    $cancelUploading?: Observable<boolean>;
-    $uploadingState?: Subject<boolean>;
-    $dispose?: Observable<boolean>;
 }
 
-export interface MediaImageData extends QuillMediaBaseConfig {
-    name: string;
-    type: string;
-    thumbnail?: ImageDimension;
-    value?: any;
-    file?: File;
+export interface MediaImageData extends MediaData {
     src: string;
-    $cancelUploading?: Observable<boolean>;
-    $uploadingState?: Subject<boolean>;
-    $dispose?: Observable<boolean>;
+    thumbnail: ImageDimension;
 }
 
 export declare type QuillMediaToolbarConfig = QuillToolbarConfig & {
