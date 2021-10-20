@@ -1,17 +1,14 @@
-import { MediaIconData } from "../quill-media.interfaces";
+import { MediaData } from "../quill-media.interfaces";
 import MediaBase from "./media-base";
 
 class MediaIcon extends MediaBase {
-    static create(data: MediaIconData) {
+    static create(data: MediaData) {
         const node = super.create(data);
-        node.classList.add("ql-media-icon");
         const link = node.firstElementChild;
         const div = document.createElement("div");
         div.className = "ql-media-container";
         const icon = document.createElement("i");
-        icon.className = !!data.iconClass ? `${data.iconClass} ${data.iconSize}` : `fas fa-file-${data.type} ${data.iconSize}`;
-        icon.setAttribute("data-size", data.iconSize);
-        if (data.iconClass) { icon.setAttribute("data-icon", data.iconClass); }
+        icon.className = `fas fa-file-${data.type} fa-3x`;
         const caption = document.createElement("span");
         caption.className = "caption";
         caption.textContent = data.name;
@@ -22,20 +19,11 @@ class MediaIcon extends MediaBase {
         return node;
     }
 
-    static value(domNode: Element): MediaIconData {
-        const data = super.value(domNode);
-        const icon = domNode.firstElementChild.firstElementChild.firstElementChild.firstElementChild;
-        const iconData = {
-            iconSize: icon.getAttribute("data-size"),
-            iconClass: icon.getAttribute("data-icon")
-        };
-        return { ...data, ...iconData };
-    }
-
-    constructor(protected domNode: Element, protected data: MediaIconData) {
+    constructor(protected domNode: Element, protected data: MediaData) {
         super(domNode, data);
     }
 }
+MediaIcon.className = "ql-media-icon";
 MediaIcon.blotName = "mediaicon";
 
 export default MediaIcon;

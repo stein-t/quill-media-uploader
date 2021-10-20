@@ -5,7 +5,6 @@ import MediaBase from "./media-base";
 class MediaImage extends MediaBase {
     static create(data: MediaImageData) {
         const node = super.create(data);
-        node.classList.add("ql-media-image");
         const link = node.firstElementChild;
         const div = document.createElement("div");
         div.className = "ql-media-container";
@@ -50,6 +49,7 @@ class MediaImage extends MediaBase {
         super(domNode, data);
     }
 }
+MediaImage.className = "ql-media-image";
 MediaImage.blotName = "mediaimage";
 
 export default MediaImage;

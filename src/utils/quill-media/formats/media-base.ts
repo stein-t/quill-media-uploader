@@ -6,15 +6,16 @@ import { catchError, finalize, take } from "rxjs/operators";
 import { MediaData } from "../quill-media.interfaces";
 
 abstract class MediaBase extends Embed {
-    static blotName;
-    static tagName;
-    static className;
+    static tagName: string;
+    static className: string;
+    static blotName: string;
 
     protected uploadSubscription: Subscription;
     protected cancelUploadingSubscription: Subscription;
 
     static create(data: MediaData) {
         const node = super.create(data);
+        node.classList.add("ql-media");
         if (!data) { return node; }
         node.setAttribute("data-type", data.type);
         const link = document.createElement("a");
@@ -24,7 +25,7 @@ abstract class MediaBase extends Embed {
             if (typeof data.value === "string") {
                 this.prepareHref(link, data.value);
             } else {
-                link.setAttribute("data-value", JSON.stringify(data.value));
+                node.setAttribute("data-value", JSON.stringify(data.value));
             }
             link.classList.add("ql-media-active");
         } else if (data.file && data.upload) {
@@ -41,7 +42,7 @@ abstract class MediaBase extends Embed {
         const data: MediaData = {
             type: domNode.getAttribute("data-type"),
             name: link.getAttribute("title"),
-            value: this.clickValue(link)
+            value: this.clickValue(domNode, link)
         };
         return data;
     }
@@ -52,8 +53,8 @@ abstract class MediaBase extends Embed {
         link.setAttribute("rel", "noopener");
     }
 
-    static clickValue(link: Element) {
-        return link.getAttribute("href") ?? JSON.parse(link.getAttribute("data-value"));
+    static clickValue(root: Element, link: Element) {
+        return link.getAttribute("href") ?? JSON.parse(root.getAttribute("data-value"));
     }
 
     static sanitize(url) {
@@ -107,7 +108,7 @@ abstract class MediaBase extends Embed {
                     if (typeof result === "string") {
                         MediaBase.prepareHref(link, result);
                     } else {
-                        link.setAttribute("data-value", JSON.stringify(result));
+                        this.domNode.setAttribute("data-value", JSON.stringify(result));
                     }
                     link.classList.add("ql-media-active");
                     const message = `[MediaUploader] Successfully uploaded ${this.data.name}`;
@@ -134,6 +135,5 @@ abstract class MediaBase extends Embed {
     }
 }
 MediaBase.tagName = "span";
-MediaBase.className = "ql-media";
 
 export default MediaBase;

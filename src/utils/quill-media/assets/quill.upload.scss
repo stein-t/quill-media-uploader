@@ -123,8 +123,6 @@ input.ql-mediauploader[type=file] {
 }
 
 span.ql-media a.ql-media-link {
-    font-size: 0.8em;
-    line-height: 1.1;
     text-decoration: none;
 }
 
@@ -142,6 +140,8 @@ span.ql-media div.ql-media-container {
     text-align: center;
     vertical-align: middle;
     margin: 0.5px;
+    font-size: 0.8em;
+    line-height: 1.1;
 }
 
 span.ql-media.ql-media-icon div.ql-media-container {
@@ -194,7 +194,7 @@ span.ql-media.ql-media-uploading div.ql-media-container::before {
     top: 50%;
     left: 50%;
     border-radius: 50%;
-    border: 0.3em solid #ccc;
+    border: 0.4em solid #ccc;
     border-top-color: #1e986c;
     cursor: default;
     z-index: 1;
@@ -212,7 +212,7 @@ span.ql-media.ql-media-image.ql-media-uploading div.ql-media-container::before {
     height: 28px;
     margin-top: -14px;
     margin-left: -14px;
-    border-width: 3px;
+    border-width: 4px;
 }
 @keyframes spinner {
     to {

@@ -9,7 +9,6 @@ export interface QuillMediaBaseConfig {
 }
 
 export interface QuillMediaConfig extends QuillMediaBaseConfig {
-    iconSize?: string;
     thumbnail?: ImageDimension;
     mimetypes?: QuillMimeTypes;
     translate?: (key: string) => string;
@@ -24,11 +23,6 @@ export interface MediaData extends QuillMediaBaseConfig {
     $cancelUploading?: Observable<boolean>;
     $uploadingState?: Subject<boolean>;
     $dispose?: Observable<boolean>;
-}
-
-export interface MediaIconData extends MediaData {
-    iconSize: string;
-    iconClass?: string;
 }
 
 export interface MediaImageData extends MediaData {
