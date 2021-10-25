@@ -8,7 +8,7 @@ class MediaIcon extends MediaBase {
         const div = document.createElement("div");
         div.className = "ql-media-container";
         const icon = document.createElement("i");
-        icon.className = `fas fa-file-${data.type} fa-3x`;
+        icon.className = `fas fa-file-${data.type} fa-2x`;
         const caption = document.createElement("span");
         caption.className = "caption";
         caption.textContent = data.name;

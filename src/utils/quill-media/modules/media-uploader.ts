@@ -29,9 +29,17 @@ class MediaUploader {
         Quill.register("formats/mediaimage", MediaImage);
     }
 
-    static sanitize(ret: string) {
-        // remove uploading icons
-        return ret.replace(/ql-media-uploading/g, "ql-media-error");
+    static sanitize(ret: string, removeError = false, removeDataImage = false) {
+        ret = ret.replace(/ql-media-uploading/gm, "ql-media-error");
+        if (removeError) {
+            const regex = /<span class=\"ql\-media(?!<span)*?ql\-media\-error.*?<\/a><\/span>.*?<\/span>/gm;
+            ret = ret.replace(regex, "");
+        }
+        if (removeDataImage) {
+            const regex = /(<div\sclass=\"ql\-media\-container\"><img src=\")data:.*?\"/gm;
+            ret = ret.replace(regex, "$1\"");
+        }
+        return ret;
     }
 
     static handleClick(

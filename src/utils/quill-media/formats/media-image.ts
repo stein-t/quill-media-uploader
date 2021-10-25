@@ -9,10 +9,10 @@ class MediaImage extends MediaBase {
         const div = document.createElement("div");
         div.className = "ql-media-container";
         const image = document.createElement("img");
-        image.setAttribute("alt", data.name);
         if (typeof data.src === "string") {
             image.setAttribute("src", this.sanitize(data.src));
         }
+        image.setAttribute("alt", data.name);
         if (data.thumbnail) {
             image.classList.add("ql-media-thumbnail");
             image.style.maxWidth = data.thumbnail.maxWidth + "px";

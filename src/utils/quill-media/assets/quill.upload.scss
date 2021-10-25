@@ -47,6 +47,10 @@
     padding: 0;
 }
 
+.ql-toolbar.ql-snow .ql-picker.ql-upload.ql-expanded .ql-picker-options {
+    z-index: 2;
+}
+
 .ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item {
     cursor: pointer;
     display: block;
@@ -140,13 +144,14 @@ span.ql-media div.ql-media-container {
     text-align: center;
     vertical-align: middle;
     margin: 0.5px;
-    font-size: 0.8em;
-    line-height: 1.1;
+    line-height: 1.2;
+    font-size: 1.1em;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 span.ql-media.ql-media-icon div.ql-media-container {
-    width: 5em;
-    padding: 0.4em 0 0.2em 0;
+    width: 3em;
+    padding-top: 0.4em;
 }
 
 span.ql-media.ql-media-icon div.ql-media-container > i {
@@ -173,14 +178,14 @@ span.ql-media.ql-media-icon[data-type="powerpoint"] div.ql-media-container > i {
 }
 
 span.ql-media.ql-media-icon div.ql-media-container > span.caption {
-    font-size: 1.1em;
+    font-size: 0.8em;
     display: inline-block;
     color: black;
     opacity: 0.8;
-    padding-top: 0.3em;
+    padding-top: 2px;
     white-space: nowrap;
     overflow: hidden;
-    width: 4em;
+    width: 3em;
 }
 
 span.ql-media.ql-media-uploading div.ql-media-container > *:not(span) {
@@ -194,7 +199,7 @@ span.ql-media.ql-media-uploading div.ql-media-container::before {
     top: 50%;
     left: 50%;
     border-radius: 50%;
-    border: 0.4em solid #ccc;
+    border: 0.3em solid #ccc;
     border-top-color: #1e986c;
     cursor: default;
     z-index: 1;
@@ -202,10 +207,10 @@ span.ql-media.ql-media-uploading div.ql-media-container::before {
     animation: spinner 0.6s linear infinite;
 }
 span.ql-media.ql-media-icon.ql-media-uploading div.ql-media-container::before {
-    width: 2.8em;
-    height: 2.8em;
-    margin-top: -1.7em;
-    margin-left: -1.4em;
+    width: 2em;
+    height: 2em;
+    margin-top: -1.18em;
+    margin-left: -1em;
 }
 span.ql-media.ql-media-image.ql-media-uploading div.ql-media-container::before {
     width: 28px;
@@ -231,9 +236,9 @@ span.ql-media.ql-media-error div.ql-media-container::after {
 }
 
 span.ql-media.ql-media-icon.ql-media-error div.ql-media-container::after {
-    font-size: 2em;
-    top: 0.05em;
-    left: 0.05em;
+    font-size: 1.4em;
+    top: 0;
+    left: 0;
 }
 
 span.ql-media.ql-media-image.ql-media-error div.ql-media-container::after {
