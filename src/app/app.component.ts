@@ -4,7 +4,7 @@ import Quill from "quill";
 import { of } from "rxjs";
 import { delay } from "rxjs/operators";
 import MediaUploader from "src/utils/quill-media/modules/media-uploader";
-import { QuillMediaModules } from "src/utils/quill-media/quill-media.interfaces";
+import { MediaUploadControl, QuillMediaModules } from "src/utils/quill-media/quill-media.interfaces";
 
 @Component({
     selector: "app-root",
@@ -26,6 +26,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        const uploadControl: MediaUploadControl = MediaUploader.buildControl(
+            (value: string) => this.uploader.uploadMedia(value)
+        );
         const modules: QuillMediaModules = {
             toolbar: {
                 container: [
@@ -38,9 +41,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     [{ indent: "-1" }, { indent: "+1" }],          // outdent/indent
                     [{ direction: "rtl" }],                         // text direction
 
-                    // ["link", "image", { upload: ["image", "audio", "video", "pdf", "word", "excel", "powerpoint"] }],
-                    ["link", "image", { upload: ["image", "audio", "video", "file"] }],
-                    // ["link", "image", "upload"],
+                    ["link", "image", ...uploadControl.Tools],
 
                     [{ size: ["small", false, "large", "huge"] }],  // custom dropdown
                     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -51,19 +52,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
                     ["clean"]                                    // remove formatting button
                 ],
-                handlers: {
-                    upload: (value: any) => {
-                        this.uploader.uploadMedia(value);
-                    }
-                }
+                handlers: uploadControl.Handlers
             },
             mediaUploader: {
                 upload: (type: string, file: File) => {
                     return of("https://www.google.de").pipe(delay(Math.floor(Math.random() * (10000 - 500 + 1) + 500)));
-                },
-                // clickHandler: (type: string, name: string, value: any, event: any) => {
-                //     console.log(`Click Handler Test - Type: ${type}, Name: ${name}, Value: ${value}`, event);
-                // }
+                }
             }
         };
         this.quill = new Quill("#editor", {

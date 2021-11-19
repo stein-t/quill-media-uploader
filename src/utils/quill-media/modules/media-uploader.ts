@@ -1,11 +1,12 @@
-import { BehaviorSubject, distinctUntilChanged, Subject, Subscription } from "rxjs";
+import { distinctUntilChanged } from "rxjs/operators";
+import { BehaviorSubject, Subject, Subscription } from "rxjs";
 import Quill, { RangeStatic } from "quill";
 const Delta = Quill.import("delta");
 import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
 import MediaIcon from "../formats/media-icon";
 import MediaImage from "../formats/media-image";
-import { MediaData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "../quill-media.interfaces";
+import { MediaUploadControl, MediaData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes, QuillMimeTypes } from "../quill-media.interfaces";
 import MediaBase from "../formats/media-base";
 
 class MediaUploader {
@@ -55,16 +56,56 @@ class MediaUploader {
         return clickHandler(type, filename, value, event);
     }
 
+    static buildControl(
+        handler: (value: string) => void,
+        options: QuillMimeTypes = MediaUploader.DEFAULTS.types,
+        merge: boolean = false
+    ): MediaUploadControl {
+        const tools = merge ? [{ upload: this.buildTools(options, false) as string[] }] : this.buildTools(options, true);
+        return {
+            Tools: tools,
+            Handlers: this.buildHandlers(tools, handler)
+        };
+    }
+
+    private static buildTools(
+        options: QuillMimeTypes | QuillMediaMimeTypes,
+        merge: boolean
+    ) {
+        return Object.entries(options).reduce((previous: (string | { upload: string[] })[], [key, val]) => {
+            if (val) {
+                if (!merge || Array.isArray(val) || typeof val === "string") {
+                    return previous.concat(`media-${key}`);
+                }
+                previous.push({ upload: this.buildTools(val, false) as string[] });
+            }
+            return previous;
+        }, []);
+    }
+
+    private static buildHandlers(
+        tools: (string | { upload: string[]; })[],
+        handler: (value: string) => void,
+        init: { [key: string]: (value: string) => void; } = { upload: handler }): { [key: string]: (value: string) => void; } {
+            return tools.reduce((p, c) => {
+                if (typeof c === "string") {
+                    p[c] = handler;
+                } else {
+                    return this.buildHandlers(c.upload, handler, p);
+                }
+                return p;
+            }, init);
+    }
+
     constructor(
         protected quill: Quill,
         protected options: QuillMediaConfig
     ) {
-        this.options.mimetypes = Object.assign(MediaUploader.DEFAULTS.mimetypes, this.options.mimetypes);
         this.options = Object.assign(MediaUploader.DEFAULTS, this.options);
         this.toolbar = this.quill.getModule("toolbar");
-        this.layout();
+        this.prepareLayout();
         if (this.options.clickHandler) {
-            quill.root.addEventListener("click", this.delegateHandler("a.ql-media-link.ql-media-active", this.options.clickHandler));
+            this.quill.root.addEventListener("click", this.delegateHandler("a.ql-media-link.ql-media-active", this.options.clickHandler));
         }
     }
 
@@ -81,6 +122,9 @@ class MediaUploader {
 
     uploadMedia(value?: boolean | string) {
         if (!value) { return; }
+        if (typeof value === "string") {
+            value = value.replace(/^media\-/, "");
+        }
         let fileInput = this.toolbar.container.querySelector("input.ql-mediauploader[type=file]");
         if (fileInput == null) {
             fileInput = document.createElement("input");
@@ -90,7 +134,7 @@ class MediaUploader {
                 const range = this.quill.getSelection(true);
                 if (fileInput.files != null && fileInput.files[0] != null) {
                     const file = fileInput.files[0];
-                    value = this.getMediaType(file.type, this.options.mimetypes);
+                    value = this.getMediaType(file.type, this.options.types);
                     if (!value) {
                         console.warn(`File type ${file.type} not supported!`);
                         return;
@@ -159,15 +203,16 @@ class MediaUploader {
         this.uploadingStateSubject.next(value);
     }
 
-    private getMimetypes(value?: boolean | string): string[] {
+    private getMimetypes(
+        value?: boolean | string,
+        options: QuillMimeTypes | QuillMediaMimeTypes = this.options.types,
+        init: string[] = []): string[] {
         if (!value) { return []; }
-        let mimetypes = typeof(value) === "string" ? this.options.mimetypes[value] : this.options.mimetypes;
-        if (!(Array.isArray(mimetypes) || typeof mimetypes === "string")) {
-            mimetypes = Object.entries(mimetypes).reduce((newObj, [key, val]) => {
-                return (Array.isArray(val) || typeof val === "string") ? newObj.concat(val) : newObj;
-            }, []);
-        }
-        return Array.isArray(mimetypes) ? mimetypes : [mimetypes];
+        return Object.entries(options).reduce((previous, [key, val]) => {
+            return (Array.isArray(val) || typeof val === "string")
+                        ? (typeof value === "string" ? (previous && previous.length || key !== value ? previous : (typeof val === "string" ? [val] : val)) : previous.concat(val))
+                        : (typeof value === "string" ? (previous && previous.length ? previous : (key === value ? this.getMimetypes(true, val) : this.getMimetypes(value, val, previous))) : previous.concat(this.getMimetypes(value, val)));
+        }, init);
     }
 
     private getMediaType(fileType: string, options: string[] | string | QuillMediaMimeTypes): string {
@@ -175,8 +220,8 @@ class MediaUploader {
             if (value === fileType) {
                 return true;
             }
-            const match = value.match(/^(\w+)\/(.*)$/);
-            if (match && match[2] === "*" && match[1] === mainType) {
+            const match = value.match(/^(\w+)\/\*$/);
+            if (match && match[1] === mainType) {
                 return true;
             }
         };
@@ -206,17 +251,29 @@ class MediaUploader {
         return result;
     }
 
-    private layout() {
+    private prepareLayout() {
+        // items tooltip
         const uploadItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-upload .ql-picker-label");
         const title = this.options.translate ? this.options.translate("media") : "Media";
         uploadItems.forEach(item => {
             item.setAttribute("title", title);
         });
+        // items label text
         const uploadPickerItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-upload .ql-picker-item");
         uploadPickerItems.forEach(item => {
+            const value = item.dataset.value.replace(/^media\-/, "");
             const label = document.createElement("span");
-            label.textContent = this.options.translate ? this.options.translate(item.dataset.value) : item.dataset.value;
+            label.textContent = this.options.translate ? this.options.translate(value) : value;
             item.appendChild(label);
+        });
+        // button items value attribute
+        const uploadButtonItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(
+            "button.ql-media-image, button.ql-media-audio, button.ql-media-video, button.ql-media-file, " +
+            "button.ql-media-pdf, button.ql-media-word, button.ql-media-excel, button.ql-media-powerpoint");
+        uploadButtonItems.forEach(item => {
+            const value = item.className.replace(/^ql\-/, "");
+            item.setAttribute("value", value);
+            item.classList.add("ql-upload");
         });
     }
 
@@ -243,21 +300,15 @@ MediaUploader.DEFAULTS = {
     translate: value => {
         return value[0].toUpperCase() + value.slice(1);     // capitalize first letter
     },
-    mimetypes: {
+    types: {
         image: "image/*",
         audio: "audio/*",
         video: "video/*",
         pdf: "application/pdf",
         word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
         excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
-        powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"],
-        file: {
-            pdf: "application/pdf",
-            word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
-            excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
-            powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
-        }
-    }
+        powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
+}
 };
 
 export default MediaUploader;

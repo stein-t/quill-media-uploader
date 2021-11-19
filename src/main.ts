@@ -9,6 +9,17 @@ import MediaUploader from "./utils/quill-media/modules/media-uploader";
 
 Quill.register("modules/history", MediaHistory);
 Quill.register("modules/mediaUploader", MediaUploader);
+MediaUploader.DEFAULTS.types = {
+    image: "image/*",
+    audio: "audio/*",
+    video: "video/*",
+    file: {
+        pdf: "application/pdf",
+        word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+        excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+        powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
+    }
+};
 
 if (environment.production) {
   enableProdMode();

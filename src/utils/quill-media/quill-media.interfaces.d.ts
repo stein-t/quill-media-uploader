@@ -10,7 +10,7 @@ export interface QuillMediaBaseConfig {
 
 export interface QuillMediaConfig extends QuillMediaBaseConfig {
     thumbnail?: ImageDimension;
-    mimetypes?: QuillMimeTypes;
+    types?: QuillMimeTypes;
     translate?: (key: string) => string;
     clickHandler?: (type: string, name: string, value: any, event: any) => void;
 }
@@ -63,4 +63,9 @@ export interface ImageDimension {
     maxHeight?: number;
     minWidth?: number;
     minHeight?: number;
+}
+
+export interface MediaUploadControl {
+    Tools: (string | { upload: string[] })[],
+    Handlers: { [key: string]: (value: string) => void; }
 }
