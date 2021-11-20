@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { AfterViewInit, Component, ElementRef, OnInit } from "@angular/core";
 import Quill from "quill";
 import { of } from "rxjs";
@@ -57,6 +57,11 @@ export class AppComponent implements OnInit, AfterViewInit {
             mediaUploader: {
                 upload: (type: string, file: File) => {
                     return of("https://www.google.de").pipe(delay(Math.floor(Math.random() * (10000 - 500 + 1) + 500)));
+                },
+                uploadError: (type: string, file: string, err: HttpErrorResponse) => {
+                    const message = `Failed to upload file ${file}. ${err.status ? err.status + ": " : ""}${err.statusText ? err.statusText + " " : ""}${err.message}`;
+                    console.warn(message);
+                    window.alert(message);
                 }
             }
         };

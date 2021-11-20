@@ -4,13 +4,14 @@ import { Observable, Subject } from "rxjs";
 export interface QuillMediaBaseConfig {
     upload?: (type: string, file: File) => Observable<any>;
     uploadSuccess?: (type: string, file: string, value: any) => void;
-    uploadError?: (type: string, file: string, err: any) => void;
+    uploadError?: (type: string, file: string, err: Error) => void;
     uploadCancelled?: (type: string, file: string) => void;
 }
 
 export interface QuillMediaConfig extends QuillMediaBaseConfig {
     thumbnail?: ImageDimension;
     types?: QuillMimeTypes;
+    acceptAnyFile?: boolean;
     translate?: (key: string) => string;
     clickHandler?: (type: string, name: string, value: any, event: any) => void;
 }

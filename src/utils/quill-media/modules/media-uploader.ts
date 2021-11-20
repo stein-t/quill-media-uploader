@@ -86,15 +86,16 @@ class MediaUploader {
     private static buildHandlers(
         tools: (string | { upload: string[]; })[],
         handler: (value: string) => void,
-        init: { [key: string]: (value: string) => void; } = { upload: handler }): { [key: string]: (value: string) => void; } {
-            return tools.reduce((p, c) => {
-                if (typeof c === "string") {
-                    p[c] = handler;
-                } else {
-                    return this.buildHandlers(c.upload, handler, p);
-                }
-                return p;
-            }, init);
+        init: { [key: string]: (value: string) => void; } = { upload: handler }
+    ): { [key: string]: (value: string) => void; } {
+        return tools.reduce((p, c) => {
+            if (typeof c === "string") {
+                p[c] = handler;
+            } else {
+                return this.buildHandlers(c.upload, handler, p);
+            }
+            return p;
+        }, init);
     }
 
     constructor(
@@ -134,10 +135,22 @@ class MediaUploader {
                 const range = this.quill.getSelection(true);
                 if (fileInput.files != null && fileInput.files[0] != null) {
                     const file = fileInput.files[0];
-                    value = this.getMediaType(file.type, this.options.types);
-                    if (!value) {
-                        console.warn(`File type ${file.type} not supported!`);
+                    value = this.getMediaType(file.type);
+                    if (!(value || this.options.acceptAnyFile)) {
+                        const message = `File type${file.type ? (" "  + file.type) : ""} not supported!`;
+                        const error = {
+                            name: "FiletypeNotSupportedException",
+                            message
+                        };
+                        if (this.options.uploadError) {
+                            this.options.uploadError(file.type, file.name, error);
+                        } else {
+                            console.warn(`[MediaUploader] ${error.name}: ${error.message}`);
+                        }
                         return;
+                    }
+                    if (!value) {
+                        value = "file";
                     }
                     const uploadingState = new BehaviorSubject<boolean>(false);
                     this.uploadingStates.push(uploadingState);
@@ -206,16 +219,24 @@ class MediaUploader {
     private getMimetypes(
         value?: boolean | string,
         options: QuillMimeTypes | QuillMediaMimeTypes = this.options.types,
-        init: string[] = []): string[] {
+        init: string[] = []
+    ): string[] {
         if (!value) { return []; }
         return Object.entries(options).reduce((previous, [key, val]) => {
+            if (typeof value === "string" && previous && previous.length) {
+                return previous;    // break
+            }
             return (Array.isArray(val) || typeof val === "string")
-                        ? (typeof value === "string" ? (previous && previous.length || key !== value ? previous : (typeof val === "string" ? [val] : val)) : previous.concat(val))
-                        : (typeof value === "string" ? (previous && previous.length ? previous : (key === value ? this.getMimetypes(true, val) : this.getMimetypes(value, val, previous))) : previous.concat(this.getMimetypes(value, val)));
+                        ? (typeof value === "string" ? (key === value ? (typeof val === "string" ? [val] : val) : previous) : previous.concat(val))
+                        : (typeof value === "string" ? (key === value ? this.getMimetypes(true, val) : this.getMimetypes(value, val, previous)) : previous.concat(this.getMimetypes(value, val)));
         }, init);
     }
 
-    private getMediaType(fileType: string, options: string[] | string | QuillMediaMimeTypes): string {
+    private getMediaType(
+        fileType: string,
+        options: QuillMimeTypes | QuillMediaMimeTypes = this.options.types
+    ): string {
+        if (!fileType) { return null; }
         const compare = (value: string) => {
             if (value === fileType) {
                 return true;
@@ -308,7 +329,8 @@ MediaUploader.DEFAULTS = {
         word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
         excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
         powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
-}
+    },
+    acceptAnyFile: false
 };
 
 export default MediaUploader;
