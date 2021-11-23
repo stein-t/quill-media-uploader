@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "TestAngularQuill": {
+    "QuillMediaUploader": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/TestAngularQuill",
+            "outputPath": "dist/QuillMediaUploader",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -77,18 +77,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "TestAngularQuill:build"
+            "browserTarget": "QuillMediaUploader:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "TestAngularQuill:build:production"
+              "browserTarget": "QuillMediaUploader:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TestAngularQuill:build"
+            "browserTarget": "QuillMediaUploader:build"
           }
         },
         "test": {
@@ -125,15 +125,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "TestAngularQuill:serve"
+            "devServerTarget": "QuillMediaUploader:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "TestAngularQuill:serve:production"
+              "devServerTarget": "QuillMediaUploader:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "TestAngularQuill"
+  "defaultProject": "QuillMediaUploader"
 }

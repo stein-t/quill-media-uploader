@@ -12,7 +12,7 @@ import { MediaUploadControl, QuillMediaModules } from "src/utils/quill-media/qui
     styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit, AfterViewInit {
-    title = "TestAngularQuill";
+    title = "QuillMediaUploader";
 
     private quill: Quill;
     private uploader: MediaUploader;
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     [{ indent: "-1" }, { indent: "+1" }],          // outdent/indent
                     [{ direction: "rtl" }],                         // text direction
 
-                    ["link", "image", ...uploadControl.Tools],
+                    ["link", ...uploadControl.Tools],
 
                     [{ size: ["small", false, "large", "huge"] }],  // custom dropdown
                     [{ header: [1, 2, 3, 4, 5, 6, false] }],
