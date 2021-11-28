@@ -4,7 +4,7 @@ import Quill from "quill";
 import { of } from "rxjs";
 import { delay } from "rxjs/operators";
 import MediaUploader from "src/utils/quill-media/modules/media-uploader";
-import { MediaUploadControl, QuillMediaModules } from "src/utils/quill-media/quill-media.interfaces";
+import { MediaUploadControl, QuillMediaModules, QuillMediaMimeTypes } from "src/utils/quill-media/quill-media.interfaces";
 
 @Component({
     selector: "app-root",
@@ -12,7 +12,7 @@ import { MediaUploadControl, QuillMediaModules } from "src/utils/quill-media/qui
     styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit, AfterViewInit {
-    title = "QuillMediaUploader";
+    title = "TestAngularQuill";
 
     private quill: Quill;
     private uploader: MediaUploader;
@@ -26,31 +26,56 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        const types: QuillMediaMimeTypes = {
+            // file: "*/*",
+            // file: ["audio/*", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ],
+            image: "image/*",
+            audio: "audio/*",
+            video: "video/*",
+            upload: {
+                // image: "image/*",
+                // audio: "audio/*",
+                // video: "video/*",
+                // office: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"],
+                pdf: "application/pdf",
+                // word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+                // excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+                // powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"],
+                office: {
+                    // pdf: "application/pdf",
+                    word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+                    excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+                    powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
+                },
+                file: "*/*"
+            }
+        };
         const uploadControl: MediaUploadControl = MediaUploader.buildControl(
-            (value: string) => this.uploader.uploadMedia(value)
+            (value: string) => this.uploader.uploadMedia(value),
+            types
         );
         const modules: QuillMediaModules = {
             toolbar: {
                 container: [
-                    ["bold", "italic", "underline", "strike"],        // toggled buttons
+                    ["bold", "italic", "underline", "strike"],          // toggled buttons
                     ["blockquote", "code-block"],
 
-                    [{ header: 1 }, { header: 2 }],               // custom button values
+                    [{ header: 1 }, { header: 2 }],                     // custom button values
                     [{ list: "ordered" }, { list: "bullet" }],
-                    [{ script: "sub" }, { script: "super" }],      // superscript/subscript
-                    [{ indent: "-1" }, { indent: "+1" }],          // outdent/indent
-                    [{ direction: "rtl" }],                         // text direction
+                    [{ script: "sub" }, { script: "super" }],           // superscript/subscript
+                    [{ indent: "-1" }, { indent: "+1" }],               // outdent/indent
+                    [{ direction: "rtl" }],                             // text direction
 
                     ["link", ...uploadControl.Tools],
 
-                    [{ size: ["small", false, "large", "huge"] }],  // custom dropdown
+                    [{ size: ["small", false, "large", "huge"] }],      // custom dropdown
                     [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
-                    [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
+                    [{ color: [] }, { background: [] }],                // dropdown with defaults from theme
                     [{ font: [] }],
                     [{ align: [] }],
 
-                    ["clean"]                                    // remove formatting button
+                    ["clean"]                                           // remove formatting button
                 ],
                 handlers: uploadControl.Handlers
             },
@@ -62,7 +87,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                     const message = `Failed to upload file ${file}. ${err.status ? err.status + ": " : ""}${err.statusText ? err.statusText + " " : ""}${err.message}`;
                     console.warn(message);
                     window.alert(message);
-                }
+                },
+                types
             }
         };
         this.quill = new Quill("#editor", {

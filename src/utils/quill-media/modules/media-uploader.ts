@@ -6,7 +6,7 @@ import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
 import MediaIcon from "../formats/media-icon";
 import MediaImage from "../formats/media-image";
-import { MediaUploadControl, MediaData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes, QuillMimeTypes } from "../quill-media.interfaces";
+import { MediaUploadControl, MediaData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "../quill-media.interfaces";
 import MediaBase from "../formats/media-base";
 
 class MediaUploader {
@@ -58,10 +58,9 @@ class MediaUploader {
 
     static buildControl(
         handler: (value: string) => void,
-        options: QuillMimeTypes = MediaUploader.DEFAULTS.types,
-        merge: boolean = false
+        options: QuillMediaMimeTypes = MediaUploader.DEFAULTS.types
     ): MediaUploadControl {
-        const tools = merge ? [{ upload: this.buildTools(options, false) as string[] }] : this.buildTools(options, true);
+        const tools = this.buildTools(options);
         return {
             Tools: tools,
             Handlers: this.buildHandlers(tools, handler)
@@ -69,30 +68,33 @@ class MediaUploader {
     }
 
     private static buildTools(
-        options: QuillMimeTypes | QuillMediaMimeTypes,
-        merge: boolean
+        options: QuillMediaMimeTypes | QuillMediaMimeTypes,
+        merge = false
     ) {
-        return Object.entries(options).reduce((previous: (string | { upload: string[] })[], [key, val]) => {
+        return Object.entries(options).reduce((previous: (string | { [key: string]: string[] })[], [key, val]) => {
             if (val) {
-                if (!merge || Array.isArray(val) || typeof val === "string") {
+                const mediakey = `media-${key}`;
+                if (merge || Array.isArray(val) || typeof val === "string") {
                     return previous.concat(`media-${key}`);
                 }
-                previous.push({ upload: this.buildTools(val, false) as string[] });
+                const upload = { } as (string | { upload: string[] });
+                upload[mediakey] = this.buildTools(val, true);
+                previous.push(upload);
             }
             return previous;
         }, []);
     }
 
     private static buildHandlers(
-        tools: (string | { upload: string[]; })[],
+        tools: (string | { [key: string]: string[]; })[],
         handler: (value: string) => void,
-        init: { [key: string]: (value: string) => void; } = { upload: handler }
+        init: { [key: string]: (value: string) => void; } = { }
     ): { [key: string]: (value: string) => void; } {
-        return tools.reduce((p, c) => {
-            if (typeof c === "string") {
-                p[c] = handler;
+        return tools.reduce((p: { [key: string]: (value: string) => void; }, current) => {
+            if (typeof current === "string") {
+                p[current] = handler;
             } else {
-                return this.buildHandlers(c.upload, handler, p);
+                this.buildHandlers(Object.keys(current), handler, p);
             }
             return p;
         }, init);
@@ -218,7 +220,7 @@ class MediaUploader {
 
     private getMimetypes(
         value?: boolean | string,
-        options: QuillMimeTypes | QuillMediaMimeTypes = this.options.types,
+        options: QuillMediaMimeTypes = this.options.types,
         init: string[] = []
     ): string[] {
         if (!value) { return []; }
@@ -234,7 +236,7 @@ class MediaUploader {
 
     private getMediaType(
         fileType: string,
-        options: QuillMimeTypes | QuillMediaMimeTypes = this.options.types
+        options: QuillMediaMimeTypes = this.options.types
     ): string {
         if (!fileType) { return null; }
         const compare = (value: string) => {
@@ -274,13 +276,13 @@ class MediaUploader {
 
     private prepareLayout() {
         // items tooltip
-        const uploadItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-upload .ql-picker-label");
+        const uploadItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-media-upload .ql-picker-label");
         const title = this.options.translate ? this.options.translate("media") : "Media";
         uploadItems.forEach(item => {
             item.setAttribute("title", title);
         });
         // items label text
-        const uploadPickerItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-upload .ql-picker-item");
+        const uploadPickerItems: NodeListOf<HTMLElement> = this.toolbar.container.querySelectorAll(".ql-media-upload .ql-picker-item");
         uploadPickerItems.forEach(item => {
             const value = item.dataset.value.replace(/^media\-/, "");
             const label = document.createElement("span");
@@ -294,7 +296,7 @@ class MediaUploader {
         uploadButtonItems.forEach(item => {
             const value = item.className.replace(/^ql\-/, "");
             item.setAttribute("value", value);
-            item.classList.add("ql-upload");
+            item.classList.add("ql-media-upload");
         });
     }
 

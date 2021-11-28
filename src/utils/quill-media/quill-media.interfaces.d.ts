@@ -10,7 +10,7 @@ export interface QuillMediaBaseConfig {
 
 export interface QuillMediaConfig extends QuillMediaBaseConfig {
     thumbnail?: ImageDimension;
-    types?: QuillMimeTypes;
+    types?: QuillMediaMimeTypes;
     acceptAnyFile?: boolean;
     translate?: (key: string) => string;
     clickHandler?: (type: string, name: string, value: any, event: any) => void;
@@ -52,10 +52,7 @@ export interface QuillMediaMimeTypes {
     pdf?: string | string[],
     word?: string | string[],
     excel?: string | string[],
-    powerpoint?: string | string[]
-}
-
-export interface QuillMimeTypes extends QuillMediaMimeTypes {
+    powerpoint?: string | string[],
     [key: string]: string | string[] | QuillMediaMimeTypes;
 }
 
@@ -67,6 +64,6 @@ export interface ImageDimension {
 }
 
 export interface MediaUploadControl {
-    Tools: (string | { upload: string[] })[],
+    Tools: (string | { [key: string]: string[] })[],
     Handlers: { [key: string]: (value: string) => void; }
 }

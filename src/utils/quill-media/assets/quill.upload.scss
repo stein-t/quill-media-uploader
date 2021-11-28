@@ -1,8 +1,8 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 
-.ql-upload *, .ql-media *,
-.ql-upload *::before, .ql-media *::before,
-.ql-upload *::after, .ql-media *::after {
+.ql-media-upload *, .ql-media *,
+.ql-media-upload *::before, .ql-media *::before,
+.ql-media-upload *::after, .ql-media *::after {
   box-sizing: border-box;
 }
 
@@ -10,23 +10,23 @@
     QuillEditor UploadTool DropDownMenu
 /* ========================================================================== */
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label > svg,
-.ql-toolbar.ql-snow button.ql-upload svg {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload > .ql-picker-label > svg,
+.ql-toolbar.ql-snow button.ql-media-upload svg {
     display: none;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label,
-.ql-toolbar.ql-snow button.ql-upload {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload > .ql-picker-label,
+.ql-toolbar.ql-snow button.ql-media-upload {
     padding: 0 5px;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload.ql-expanded > .ql-picker-label {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload.ql-expanded > .ql-picker-label {
     color: #06c;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
-.ql-toolbar.ql-snow button.ql-upload::before,
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload > .ql-picker-label::before,
+.ql-toolbar.ql-snow button.ql-media-upload::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item::before {
     font-style: normal;
     font-variant: normal;
     text-rendering: auto;
@@ -35,14 +35,14 @@
     font-size: 16px;
     font-weight: 900;
 }
-.ql-toolbar.ql-snow button.ql-upload::before {
+.ql-toolbar.ql-snow button.ql-media-upload::before {
     color: #444;
 }
-.ql-toolbar.ql-snow button.ql-upload:hover::before {
+.ql-toolbar.ql-snow button.ql-media-upload:hover::before {
     color: inherit;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-options {
     font-size: 14px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -53,11 +53,11 @@
     padding: 0;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload.ql-expanded .ql-picker-options {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload.ql-expanded .ql-picker-options {
     z-index: 2;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-options .ql-picker-item {
     cursor: pointer;
     display: block;
     color: #777;
@@ -67,57 +67,58 @@
     padding: 3px 20px;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item:hover {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-options .ql-picker-item:hover {
     background-color: #e1e3e9;
     color: #333;
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-options .ql-picker-item:hover::before {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-options .ql-picker-item:hover::before {
     color: #06c;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item > span {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item > span {
     margin-left: 10px;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item::before {
     display: inline-block;
     line-height: 20px;
     width: 20px;
 }
 
-.ql-toolbar.ql-snow .ql-picker.ql-upload > .ql-picker-label::before,
-.ql-toolbar.ql-snow button.ql-upload::before,
-.ql-snow .ql-picker.ql-upload .ql-picker-item::before {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload > .ql-picker-label::before,
+.ql-toolbar.ql-snow button.ql-media-upload::before,
+.ql-snow .ql-picker.ql-media-upload .ql-picker-item::before {
     content: "\f0c6";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-image"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-image"]::before,
 .ql-toolbar.ql-snow button.ql-media-image::before {
     content: "\f03e";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-audio"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-audio"]::before,
 .ql-toolbar.ql-snow button.ql-media-audio::before {
     content: "\f028";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-video"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-video"]::before,
 .ql-toolbar.ql-snow button.ql-media-video:before {
     content: "\f03d";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-file"]::before {
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-file"]::before,
+.ql-toolbar.ql-snow button.ql-media-file:before {
     content: "\f15b";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-pdf"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-pdf"]::before,
 .ql-toolbar.ql-snow button.ql-media-pdf::before {
     content: "\f1c1";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-word"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-word"]::before,
 .ql-toolbar.ql-snow button.ql-media-word::before {
     content: "\f1c2";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-excel"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-excel"]::before,
 .ql-toolbar.ql-snow button.ql-media-excel::before {
     content: "\f1c3";
 }
-.ql-toolbar.ql-snow .ql-picker.ql-upload .ql-picker-item[data-value="media-powerpoint"]::before,
+.ql-toolbar.ql-snow .ql-picker.ql-media-upload .ql-picker-item[data-value="media-powerpoint"]::before,
 .ql-toolbar.ql-snow button.ql-media-powerpoint::before {
     content: "\f1c4";
 }
