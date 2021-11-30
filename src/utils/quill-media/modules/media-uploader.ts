@@ -143,12 +143,11 @@ class MediaUploader {
                         this.handleError("FileNotSupportedException", `File type${file.type ? (" "  + file.type) : ""} not supported!`, file);
                         return;
                     }
-                    if (!value) {
-                        value = "file";
-                    }
                     if (!this.validateFileExtension(file.name)) {
-                        this.handleError("FileNotSupportedException", `File "${file.name}" not supported!`, file);
+                        this.handleError("FileNotSupportedException", `File type "${file.name}" not supported!`, file);
+                        return;
                     }
+                    if (!value) { value = "file"; }
                     const uploadingState = new BehaviorSubject<boolean>(false);
                     this.uploadingStates.push(uploadingState);
                     this.uploadingStateSubscription = uploadingState.subscribe(state => this.notifyUploadingState(state));
