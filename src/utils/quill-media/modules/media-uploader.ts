@@ -105,6 +105,7 @@ class MediaUploader {
         protected options: QuillMediaConfig
     ) {
         this.options = Object.assign(MediaUploader.DEFAULTS, this.options);
+        this.options.blackFileExtensions = this.options.blackFileExtensions?.map(e => e.replace(/^\./, ""));
         this.toolbar = this.quill.getModule("toolbar");
         this.prepareLayout();
         if (this.options.clickHandler) {
@@ -139,20 +140,14 @@ class MediaUploader {
                     const file = fileInput.files[0];
                     value = this.getMediaType(file.type);
                     if (!(value || this.options.acceptAnyFile)) {
-                        const message = `File type${file.type ? (" "  + file.type) : ""} not supported!`;
-                        const error = {
-                            name: "FiletypeNotSupportedException",
-                            message
-                        };
-                        if (this.options.uploadError) {
-                            this.options.uploadError(file.type, file.name, error);
-                        } else {
-                            console.warn(`[MediaUploader] ${error.name}: ${error.message}`);
-                        }
+                        this.handleError("FileNotSupportedException", `File type${file.type ? (" "  + file.type) : ""} not supported!`, file);
                         return;
                     }
                     if (!value) {
                         value = "file";
+                    }
+                    if (!this.validateFileExtension(file.name)) {
+                        this.handleError("FileNotSupportedException", `File "${file.name}" not supported!`, file);
                     }
                     const uploadingState = new BehaviorSubject<boolean>(false);
                     this.uploadingStates.push(uploadingState);
@@ -311,6 +306,27 @@ class MediaUploader {
             } while (target !== event.currentTarget && (target = target.parentNode as HTMLElement));
         };
     }
+
+    private handleError(name: string, message: string, file: any) {
+        const error = {
+            name,
+            message
+        };
+        if (this.options.uploadError) {
+            this.options.uploadError(file.type, file.name, error);
+        } else {
+            console.warn(`[MediaUploader] ${error.name}: ${error.message}`);
+        }
+    }
+
+    private validateFileExtension(name: string) {
+        if (!this.options.blackFileExtensions) { return true; }
+        const extension = name.slice(name.lastIndexOf(".")).replace(/^\./, "");
+        if (this.options.blackFileExtensions.some(e => e === extension)) {
+            return false;
+        }
+        return true;
+    }
 }
 
 MediaUploader.DEFAULTS = {
@@ -332,7 +348,18 @@ MediaUploader.DEFAULTS = {
         excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
         powerpoint: ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
     },
-    acceptAnyFile: false
+    acceptAnyFile: false,
+    blackFileExtensions: [
+      // programs
+      ".exe", ".pif", ".application", ".gadget", ".msi", ".msp", ".com", ".src", ".hta", ".cpl", ".msc", ".jar",
+      // scripts
+      ".bat", ".cmd", ".vb", ".vbs", ".vbe", ".js", ".jse", ".ws", ".wsf", ".wsc", ".wsh", ".ps1", ".ps1xml", ".ps2",
+      ".ps2xml", ".psc1", ".psc2", ".msh", ".msh1", ".msh2", ".mshxml", ".msh1xml", ".msh2xml", ".psm1",
+      // shortcuts
+      ".scf", ".link", ".inf",
+      // other
+      ".reg"
+    ]
 };
 
 export default MediaUploader;

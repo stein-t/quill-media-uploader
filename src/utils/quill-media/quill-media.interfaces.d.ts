@@ -12,6 +12,7 @@ export interface QuillMediaConfig extends QuillMediaBaseConfig {
     thumbnail?: ImageDimension;
     types?: QuillMediaMimeTypes;
     acceptAnyFile?: boolean;
+    blackFileExtensions?: string[];
     translate?: (key: string) => string;
     clickHandler?: (type: string, name: string, value: any, event: any) => void;
 }
