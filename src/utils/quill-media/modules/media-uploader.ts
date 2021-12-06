@@ -321,7 +321,7 @@ class MediaUploader {
     private validateFileExtension(name: string) {
         if (!this.options.blackFileExtensions) { return true; }
         const extension = name.slice(name.lastIndexOf(".")).replace(/^\./, "");
-        if (this.options.blackFileExtensions.some(e => e === extension)) {
+        if (this.options.blackFileExtensions.includes(extension)) {
             return false;
         }
         return true;
