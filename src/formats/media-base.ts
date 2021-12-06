@@ -3,7 +3,7 @@ const Embed = Quill.import("blots/embed");
 import { sanitize } from "quill/formats/link";
 import { Subscription } from "rxjs";
 import { catchError, finalize, take } from "rxjs/operators";
-import { MediaData } from "../quill-media.interfaces";
+import { MediaData } from "../index";
 
 abstract class MediaBase extends Embed {
     static tagName: string;

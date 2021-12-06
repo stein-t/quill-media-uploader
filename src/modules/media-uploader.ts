@@ -6,7 +6,7 @@ import Emitter from "quill/core/emitter";
 const Embed = Quill.import("blots/embed");
 import MediaIcon from "../formats/media-icon";
 import MediaImage from "../formats/media-image";
-import { MediaUploadControl, MediaData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "../quill-media.interfaces";
+import { MediaUploadControl, MediaData, MediaImageData, QuillMediaConfig, QuillMediaMimeTypes } from "../index";
 import MediaBase from "../formats/media-base";
 
 class MediaUploader {

@@ -1,5 +1,46 @@
-import { QuillModules, QuillToolbarConfig } from "ngx-quill";
 import { Observable, Subject } from "rxjs";
+import MediaBase from "./formats/media-base";
+import MediaIcon from "./formats/media-icon";
+import MediaImage from "./formats/media-image";
+import MediaUploader from "./modules/media-uploader";
+
+// taken from ngx-quill
+export interface QuillModules {
+    [key: string]: any;
+    clipboard?: {
+        matchers?: any[];
+        matchVisual?: boolean;
+    } | boolean;
+    history?: {
+        delay?: number;
+        maxStack?: number;
+        userOnly?: boolean;
+    } | boolean;
+    keyboard?: {
+        bindings?: any;
+    } | boolean;
+    syntax?: boolean;
+    toolbar?: QuillToolbarConfig | string | {
+        container?: string | string[] | QuillToolbarConfig;
+        handlers?: {
+            [key: string]: any;
+        };
+    } | boolean;
+}
+
+// taken from ngx-quill
+export declare type QuillToolbarConfig = Array<Array<string | {
+    indent?: string;
+    list?: string;
+    direction?: string;
+    header?: number | Array<boolean | number>;
+    color?: string[] | string;
+    background?: string[] | string;
+    align?: string[] | string;
+    script?: string;
+    font?: string[] | string;
+    size?: Array<boolean | string>;
+}>>;
 
 export interface QuillMediaBaseConfig {
     upload?: (type: string, file: File) => Observable<any>;
@@ -68,3 +109,5 @@ export interface MediaUploadControl {
     Tools: (string | { [key: string]: string[] })[],
     Handlers: { [key: string]: (value: string) => void; }
 }
+
+export  { MediaUploader, MediaBase, MediaIcon, MediaImage }

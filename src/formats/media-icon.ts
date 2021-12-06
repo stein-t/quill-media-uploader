@@ -1,4 +1,4 @@
-import { MediaData } from "../quill-media.interfaces";
+import { MediaData } from "../index";
 import MediaBase from "./media-base";
 
 class MediaIcon extends MediaBase {

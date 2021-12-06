@@ -1,5 +1,5 @@
-import { ImageDimension, MediaImageData } from "../quill-media.interfaces";
 import { sanitize } from "quill/formats/link";
+import { ImageDimension, MediaImageData } from "../index";
 import MediaBase from "./media-base";
 
 class MediaImage extends MediaBase {
