@@ -1,11 +1,12 @@
 {
   "name": "quill-media-uploader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Quill module for uploading any media.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "src/assets/quill.upload.scss"
   ],
   "author": "Thomas Stein",
   "license": "MIT",
